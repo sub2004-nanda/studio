@@ -45,7 +45,7 @@ const Header = () => {
           <Button variant="ghost" asChild>
             <Link href="/login">Login</Link>
           </Button>
-          <Button asChild className="shadow-lg shadow-primary/40 transition-all hover:scale-105 animate-pulse hover:animate-none">
+          <Button asChild className="shadow-lg shadow-primary/40 transition-all hover:scale-105">
             <Link href="/signup">Sign Up</Link>
           </Button>
         </div>
