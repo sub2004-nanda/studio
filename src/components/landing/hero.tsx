@@ -25,7 +25,7 @@ const Hero = () => {
                 Get Started Free <ArrowRight className="ml-2 h-5 w-5" />
               </Link>
             </Button>
-            <Button size="lg" variant="ghost" asChild>
+            <Button size="lg" variant="ghost" asChild className="hover:bg-primary/90 hover:text-primary-foreground">
               <Link href="#features">Learn More</Link>
             </Button>
           </div>

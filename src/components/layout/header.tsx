@@ -23,7 +23,7 @@ const Header = () => {
           <Link href="/" className="flex items-center space-x-2">
             <div className="relative">
                 <Logo className="h-8 w-8 text-primary" />
-                <div className="absolute -inset-1 bg-primary/20 blur-lg -z-10"></div>
+                <div className="absolute -inset-1 bg-primary/20 blur-lg -z-10 animate-blob"></div>
             </div>
             <span className="hidden font-bold sm:inline-block font-headline text-lg">ProductivityPulse</span>
           </Link>
@@ -42,7 +42,7 @@ const Header = () => {
           </nav>
         </div>
         <div className="hidden md:flex items-center justify-end space-x-2">
-          <Button variant="ghost" asChild>
+          <Button variant="ghost" asChild className="hover:bg-primary/90 hover:text-primary-foreground">
             <Link href="/login">Login</Link>
           </Button>
           <Button asChild className="shadow-lg shadow-primary/40 transition-all hover:scale-105">
