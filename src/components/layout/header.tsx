@@ -17,11 +17,14 @@ const Header = () => {
   ];
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 shadow-sm">
+    <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 shadow-md">
       <div className="container flex h-16 items-center">
         <div className="mr-4 flex items-center">
           <Link href="/" className="flex items-center space-x-2">
-            <Logo className="h-8 w-8 text-primary" />
+            <div className="relative">
+                <Logo className="h-8 w-8 text-primary" />
+                <div className="absolute -inset-1 bg-primary/20 blur-lg -z-10"></div>
+            </div>
             <span className="hidden font-bold sm:inline-block font-headline text-lg">ProductivityPulse</span>
           </Link>
         </div>
@@ -42,7 +45,7 @@ const Header = () => {
           <Button variant="ghost" asChild>
             <Link href="/login">Login</Link>
           </Button>
-          <Button asChild className="shadow-md shadow-primary/20 transition-all hover:scale-105">
+          <Button asChild className="shadow-lg shadow-primary/40 transition-all hover:scale-105 animate-pulse hover:animate-none">
             <Link href="/signup">Sign Up</Link>
           </Button>
         </div>
