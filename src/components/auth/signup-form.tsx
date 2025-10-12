@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState } from 'react';
@@ -57,8 +58,8 @@ export default function SignupForm() {
         uid: user.uid,
         name: values.name,
         email: values.email,
-        role: 'employee',
-        status: 'approved',
+        role: 'employee', // Assign default role
+        status: 'approved', // Set status to approved
       });
       
       toast({
@@ -69,13 +70,11 @@ export default function SignupForm() {
 
     } catch (error: any) {
       const errorCode = error.code;
-      let friendlyMessage = 'An unexpected error occurred. Please try again.';
+      let friendlyMessage = error.message || 'An unexpected error occurred. Please try again.';
       if (errorCode === 'auth/email-already-in-use') {
         friendlyMessage = 'This email is already registered. Please log in instead.';
       } else if (errorCode === 'auth/weak-password') {
         friendlyMessage = 'The password is too weak. Please choose a stronger password.';
-      } else if (errorCode === 'auth/invalid-api-key') {
-        friendlyMessage = 'There is a configuration problem. Please contact support.';
       }
       setError(friendlyMessage);
     } finally {
