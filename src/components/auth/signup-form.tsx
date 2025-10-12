@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useForm } from "react-hook-form";
@@ -46,17 +47,18 @@ export function SignupForm() {
 
       await updateProfile(user, { displayName: values.name });
 
+      // Default role is 'employee' and status is 'approved'
       await setDoc(doc(db, "users", user.uid), {
         uid: user.uid,
         name: values.name,
         email: user.email,
-        role: "unassigned",
-        status: "pending_approval",
+        role: "employee", // Default role
+        status: "approved", // Default status
       });
 
       toast({
-        title: "Account created",
-        description: "Your account is pending admin approval. Redirecting...",
+        title: "Account created successfully!",
+        description: "You can now log in. Redirecting to dashboard...",
       });
       router.push("/dashboard");
 
