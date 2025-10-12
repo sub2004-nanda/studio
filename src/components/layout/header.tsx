@@ -26,12 +26,12 @@ const Header = () => {
           </Link>
         </div>
         <div className="flex flex-1 items-center justify-end space-x-2 md:justify-center">
-          <nav className="hidden md:flex md:items-center md:space-x-6 text-sm font-medium">
+          <nav className="hidden md:flex md:items-center md:space-x-2 text-sm font-medium">
             {navLinks.map((link) => (
               <Link
                 key={link.name}
                 href={link.href}
-                className="transition-colors hover:text-primary"
+                className="px-3 py-2 rounded-md transition-all hover:bg-muted active:scale-95"
               >
                 {link.name}
               </Link>
