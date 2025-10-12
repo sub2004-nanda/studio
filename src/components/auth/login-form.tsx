@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState } from 'react';
@@ -54,11 +55,11 @@ export default function LoginForm() {
       router.push('/dashboard');
     } catch (error: any) {
       const errorCode = error.code;
-      let friendlyMessage = 'An unexpected error occurred. Please try again.';
+      let friendlyMessage = error.message || 'An unexpected error occurred. Please try again.';
       if (errorCode === 'auth/wrong-password' || errorCode === 'auth/user-not-found' || errorCode === 'auth/invalid-credential') {
         friendlyMessage = 'Invalid email or password. Please check your credentials and try again.';
       } else if (errorCode === 'auth/invalid-api-key') {
-        friendlyMessage = 'There is a configuration problem. Please contact support.';
+        friendlyMessage = 'There is a configuration problem with the API key. Please contact support.';
       }
       setError(friendlyMessage);
     } finally {
