@@ -6,6 +6,7 @@ import * as z from "zod";
 import { useRouter } from "next/navigation";
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { doc, setDoc } from "firebase/firestore";
+import { Loader2 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -43,10 +44,8 @@ export function SignupForm() {
       const userCredential = await createUserWithEmailAndPassword(auth, values.email, values.password);
       const user = userCredential.user;
 
-      // Update Firebase auth profile
       await updateProfile(user, { displayName: values.name });
 
-      // Create user document in Firestore
       await setDoc(doc(db, "users", user.uid), {
         uid: user.uid,
         name: values.name,
@@ -57,11 +56,12 @@ export function SignupForm() {
 
       toast({
         title: "Account created",
-        description: "Your account has been created and is pending admin approval.",
+        description: "Your account is pending admin approval. Redirecting...",
       });
       router.push("/dashboard");
 
-    } catch (error: any) {
+    } catch (error: any)
+     {
       toast({
         variant: "destructive",
         title: "Signup failed",
@@ -113,7 +113,12 @@ export function SignupForm() {
           )}
         />
         <Button type="submit" className="w-full" disabled={form.formState.isSubmitting}>
-          {form.formState.isSubmitting ? "Creating account..." : "Sign Up"}
+           {form.formState.isSubmitting ? (
+              <>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                Please wait
+              </>
+            ) : "Create Account"}
         </Button>
       </form>
     </Form>

@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import { Menu, X, Briefcase } from 'lucide-react';
+import { Menu, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import Logo from '@/components/icons/logo';
 
@@ -22,7 +22,7 @@ const Header = () => {
         <div className="mr-4 flex items-center">
           <Link href="/" className="flex items-center space-x-2">
             <Logo className="h-8 w-8 text-primary" />
-            <span className="hidden font-bold sm:inline-block font-headline">ProductivityPulse</span>
+            <span className="hidden font-bold sm:inline-block font-headline text-lg">ProductivityPulse</span>
           </Link>
         </div>
         <div className="flex flex-1 items-center justify-end space-x-2 md:justify-center">
@@ -42,7 +42,7 @@ const Header = () => {
           <Button variant="ghost" asChild>
             <Link href="/login">Login</Link>
           </Button>
-          <Button asChild className="transition-all hover:scale-105 hover:shadow-md hover:bg-accent hover:text-accent-foreground">
+          <Button asChild className="shadow">
             <Link href="/signup">Sign Up</Link>
           </Button>
         </div>

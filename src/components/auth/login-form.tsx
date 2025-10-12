@@ -5,6 +5,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { useRouter } from "next/navigation";
 import { signInWithEmailAndPassword } from "firebase/auth";
+import { Loader2 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -40,7 +41,7 @@ export function LoginForm() {
       await signInWithEmailAndPassword(auth, values.email, values.password);
       toast({
         title: "Success",
-        description: "Logged in successfully.",
+        description: "Logged in successfully. Redirecting...",
       });
       router.push("/dashboard");
     } catch (error: any) {
@@ -82,7 +83,12 @@ export function LoginForm() {
           )}
         />
         <Button type="submit" className="w-full" disabled={form.formState.isSubmitting}>
-          {form.formState.isSubmitting ? "Logging in..." : "Login"}
+          {form.formState.isSubmitting ? (
+              <>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                Please wait
+              </>
+            ) : "Login"}
         </Button>
       </form>
     </Form>
