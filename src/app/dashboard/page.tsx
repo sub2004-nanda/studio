@@ -84,6 +84,8 @@ export default function DashboardPage() {
     return null; // Redirection is handled by the effect
   }
   
+  // This logic is currently not hit because new users are auto-approved.
+  // We can re-enable this later for admin-approval flows.
   if (userData?.status === 'pending_approval') {
       return <PendingApproval user={user} />;
   }
