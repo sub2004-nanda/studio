@@ -16,21 +16,17 @@ export function useUsers() {
   const { userData, loading: authLoading } = useAuth();
 
   useEffect(() => {
-    // If auth is still loading, we are also loading.
     if (authLoading) {
       setLoading(true);
       return;
     }
-    
-    // If auth is done, but there's no DB, no user, or the user is not an admin,
-    // we stop loading and return an empty array.
+
     if (!db || !userData || userData.role !== 'admin') {
       setUsers([]);
       setLoading(false);
       return;
     }
 
-    // At this point, we are sure the user is an admin.
     const usersCollectionRef = collection(db, 'users');
     const q = query(usersCollectionRef, orderBy('name'));
 

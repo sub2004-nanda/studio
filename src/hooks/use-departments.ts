@@ -18,16 +18,15 @@ export function useDepartments() {
   const [departments, setDepartments] = useState<Department[]>([]);
   const [loading, setLoading] = useState(true);
   const db = useFirestore();
-  const { userData } = useAuth();
+  const { userData, loading: authLoading } = useAuth();
 
   useEffect(() => {
-    if (!db || !userData) {
-      setLoading(false);
-      return;
+    if (authLoading) {
+        setLoading(true);
+        return;
     }
 
-    // Only admins should be able to fetch all departments
-    if (userData.role !== 'admin') {
+    if (!db || !userData || userData.role !== 'admin') {
         setDepartments([]);
         setLoading(false);
         return;
@@ -56,7 +55,7 @@ export function useDepartments() {
     });
 
     return () => unsubscribe();
-  }, [db, userData]);
+  }, [db, userData, authLoading]);
 
   return { departments, loading };
 }
