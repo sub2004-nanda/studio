@@ -8,7 +8,10 @@ import {
   Users2,
   FolderKanban,
   Activity,
-  User
+  User,
+  Target,
+  CheckSquare,
+  BarChart
 } from "lucide-react";
 import {
   DropdownMenu,
@@ -43,11 +46,33 @@ export default function DashboardHeader() {
   };
 
   const navItems = [
-    { href: "/dashboard", icon: Home, label: "Home" },
-    { href: "/dashboard/users", icon: Users2, label: "Users" },
-    { href: "/dashboard/projects", icon: FolderKanban, label: "Projects" },
-    { href: "/dashboard/performance", icon: Activity, label: "Performance" },
+    { href: "/dashboard", icon: Home, label: "Home", roles: ['admin', 'manager', 'employee'] },
   ];
+
+  const adminNav = [
+     { href: "/dashboard/users", icon: Users2, label: "Users", roles: ['admin'] },
+     { href: "/dashboard/projects", icon: FolderKanban, label: "Projects", roles: ['admin'] },
+     { href: "/dashboard/performance", icon: Activity, label: "Performance", roles: ['admin'] },
+  ]
+
+  const managerNav = [
+    { href: "/dashboard/team", icon: Users2, label: "Team", roles: ['manager'] },
+    { href: "/dashboard/goals", icon: Target, label: "Goals", roles: ['manager'] },
+    { href: "/dashboard/tasks", icon: CheckSquare, label: "Tasks", roles: ['manager'] },
+    { href: "/dashboard/reports", icon: BarChart, label: "Reports", roles: ['manager'] },
+    { href: "/dashboard/communication", icon: Bell, label: "Messeges", roles: ['manager'] },
+  ]
+
+  const getNav = () => {
+    switch (userData?.role) {
+      case 'admin':
+        return [...navItems, ...adminNav];
+      case 'manager':
+        return [...navItems, ...managerNav];
+      default:
+        return navItems;
+    }
+  }
 
   return (
     <header className="sticky top-0 z-40 flex h-16 items-center gap-4 border-b bg-background px-4 md:px-6">
@@ -59,7 +84,7 @@ export default function DashboardHeader() {
           <span className="sr-only">ProductivityPulse</span>
         </Link>
       <nav className="hidden flex-1 flex-col gap-6 text-lg font-medium md:flex md:flex-row md:items-center md:justify-center md:gap-5 md:text-sm lg:gap-6">
-        {navItems.map((item) => (
+        {getNav().map((item) => (
             <Link
                 key={item.href}
                 href={item.href}
