@@ -3,9 +3,10 @@
 
 import { useAuth } from "@/hooks/use-auth";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { Loader2 } from "lucide-react";
 import DashboardHeader from "@/components/layout/dashboard-header";
+import DashboardSidebar from "@/components/layout/dashboard-sidebar";
 
 export default function DashboardLayout({
   children,
@@ -21,7 +22,7 @@ export default function DashboardLayout({
     }
   }, [status, router]);
 
-  if (status === 'loading' || status === 'unauthenticated') {
+  if (status === 'loading' || status === 'unauthenticated' || !user) {
     return (
       <div className="flex min-h-screen items-center justify-center">
         <Loader2 className="h-12 w-12 animate-spin text-primary" />
@@ -30,11 +31,14 @@ export default function DashboardLayout({
   }
   
   return (
-      <div className="flex min-h-screen w-full flex-col bg-muted/40">
+      <div className="grid min-h-screen w-full md:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr]">
+        <DashboardSidebar />
+        <div className="flex flex-col">
           <DashboardHeader />
-          <main className="flex flex-1 flex-col gap-4 p-4 lg:gap-6 lg:p-6">
+          <main className="flex flex-1 flex-col gap-4 p-4 lg:gap-6 lg:p-6 bg-muted/40">
               {children}
           </main>
+        </div>
       </div>
   );
 }
