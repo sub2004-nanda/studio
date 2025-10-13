@@ -1,14 +1,11 @@
 
 "use client";
 
-import { useRouter } from "next/navigation";
-import { useEffect } from "react";
-import { useAuth } from "@/hooks/use-auth";
-import { Button } from "@/components/ui/button";
 import { useAuth as useFirebaseAuth } from "@/firebase/provider";
+import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Loader2 } from "lucide-react";
 import Logo from "@/components/icons/logo";
+import { useAuth } from "@/hooks/use-auth";
 import AdminDashboard from "@/components/dashboards/AdminDashboard";
 import ManagerDashboard from "@/components/dashboards/ManagerDashboard";
 import EmployeeDashboard from "@/components/dashboards/EmployeeDashboard";

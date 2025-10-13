@@ -76,12 +76,12 @@ export default function SignupForm() {
         name: values.name,
         email: values.email,
         role: values.role, // Assign selected role
-        status: 'approved', // Set status to approved by default
+        status: 'pending_approval', // Set status to pending_approval by default
       });
       
       toast({
         title: 'Account Created',
-        description: "You're now logged in.",
+        description: "Your account is pending admin approval.",
       });
       router.push('/dashboard');
 
@@ -128,7 +128,7 @@ export default function SignupForm() {
             <FormItem>
               <FormLabel>Email</FormLabel>
               <FormControl>
-                <Input placeholder="name@example.com" {...field} />
+                <Input type="email" placeholder="name@example.com" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
