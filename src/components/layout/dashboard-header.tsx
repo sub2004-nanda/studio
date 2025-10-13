@@ -19,7 +19,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { Input } from "../ui/input";
 import Logo from '../icons/logo';
 import { cn } from '@/lib/utils';
-import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from '../ui/sheet';
+import { Sheet, SheetContent, SheetTrigger } from '../ui/sheet';
 import { Menu } from 'lucide-react';
 import React from 'react';
 
@@ -97,23 +97,23 @@ export default function DashboardHeader() {
                     <span className="sr-only">Toggle navigation menu</span>
                     </Button>
                 </SheetTrigger>
-                <SheetContent side="left">
-                    <nav className="grid gap-6 text-lg font-medium">
+                <SheetContent side="left" className="flex flex-col">
+                    <nav className="grid gap-2 text-lg font-medium">
                         <Link
                             href="/dashboard"
                             className="flex items-center gap-2 text-lg font-semibold mb-4"
                             onClick={() => setIsMobileMenuOpen(false)}
                         >
                             <Logo className="h-7 w-7 text-primary" />
-                            <span className="sr-only">ProductivityPulse</span>
+                            <span>ProductivityPulse</span>
                         </Link>
                         {currentNavItems.map(item => (
                             <Link
                                 key={item.href}
                                 href={item.href}
                                 className={cn(
-                                    "flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary",
-                                    pathname === item.href && "text-primary bg-muted"
+                                    "flex items-center gap-4 rounded-xl px-3 py-2 text-muted-foreground hover:text-foreground",
+                                    pathname === item.href && "bg-muted text-foreground"
                                 )}
                                 onClick={() => setIsMobileMenuOpen(false)}
                             >
@@ -149,15 +149,13 @@ export default function DashboardHeader() {
                     </Button>
                 </SheetTrigger>
                 <SheetContent>
-                    <SheetHeader>
-                    <SheetTitle>AI Decision Support Assistant</SheetTitle>
-                    <SheetDescription>
-                        Ask questions or give commands in natural language. The AI will help you find data or perform actions.
-                    </SheetDescription>
-                    </SheetHeader>
-                    <div className="mt-4">
-                        <Input placeholder="e.g., 'Show me top 5 performers this month'" />
-                        <div className="mt-4 p-4 bg-muted/50 rounded-lg text-center">
+                    <div className="p-4">
+                        <h3 className="font-semibold">AI Decision Support Assistant</h3>
+                        <p className="text-sm text-muted-foreground mt-1">
+                            Ask questions or give commands in natural language. The AI will help you find data or perform actions.
+                        </p>
+                        <Input placeholder="e.g., 'Show me top 5 performers'" className="mt-4" />
+                        <div className="mt-4 p-4 bg-muted/50 rounded-lg text-center h-64">
                             <p className="text-sm text-muted-foreground">Chat history will appear here.</p>
                         </div>
                     </div>
