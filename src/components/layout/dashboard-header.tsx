@@ -120,22 +120,23 @@ export default function DashboardHeader() {
             </SheetContent>
             </Sheet>
 
-            <div className="hidden md:flex items-center gap-2">
-                <Link href="/dashboard" className="flex items-center gap-2 font-semibold mr-4">
-                    <Logo className="h-6 w-6 text-primary" />
-                    <span className="">ProductivityPulse</span>
-                </Link>
-                <nav className="hidden flex-col gap-6 text-lg font-medium md:flex md:flex-row md:items-center md:gap-5 md:text-sm lg:gap-6">
-                    {currentNavItems.map(item => (
-                        <Link
-                            key={item.href}
-                            href={item.href}
-                            className={cn("transition-colors hover:text-foreground", pathname === item.href ? "text-foreground" : "text-muted-foreground")}
-                        >
-                            {item.label}
-                        </Link>
-                    ))}
-                </nav>
+            <Link href="/dashboard" className="hidden md:flex items-center gap-2 font-semibold mr-6">
+                <Logo className="h-6 w-6 text-primary" />
+                <span className="">ProductivityPulse</span>
+            </Link>
+
+            <div className="flex-1 items-center justify-end space-x-2 md:flex md:justify-center">
+              <nav className="hidden flex-col gap-6 text-lg font-medium md:flex md:flex-row md:items-center md:gap-5 md:text-sm lg:gap-6">
+                  {currentNavItems.map(item => (
+                      <Link
+                          key={item.href}
+                          href={item.href}
+                          className={cn("transition-colors hover:text-foreground", pathname === item.href ? "text-foreground font-semibold" : "text-muted-foreground")}
+                      >
+                          {item.label}
+                      </Link>
+                  ))}
+              </nav>
             </div>
       
         <div className="flex items-center gap-4 md:ml-auto md:gap-2 lg:gap-4">
