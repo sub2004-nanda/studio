@@ -19,20 +19,23 @@ export function useDepartments() {
   const [departments, setDepartments] = useState<Department[]>([]);
   const [loading, setLoading] = useState(true);
   const db = useFirestore();
-  const { userData, loading: authLoading } = useAuth();
+  const { status, userData } = useAuth();
 
   useEffect(() => {
-    if (authLoading) {
+    // If auth state is still loading, we are also loading.
+    if (status === 'loading') {
         setLoading(true);
         return;
     }
 
-    if (!userData || userData.role !== 'admin' || !db) {
+    // If auth is resolved but user is not an admin (or not logged in), stop loading and return empty array.
+    if (status !== 'resolved' || !userData || userData.role !== 'admin' || !db) {
         setDepartments([]);
         setLoading(false);
         return;
     }
 
+    // Now we are sure we have a logged-in admin.
     const departmentsCollectionRef = collection(db, 'departments');
     const q = query(departmentsCollectionRef, orderBy('name'));
 
@@ -56,7 +59,7 @@ export function useDepartments() {
     });
 
     return () => unsubscribe();
-  }, [db, userData, authLoading]);
+  }, [db, status, userData]);
 
   return { departments, loading };
 }

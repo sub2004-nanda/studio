@@ -42,9 +42,9 @@ function PendingApproval({ user }: { user: any; }) {
 }
 
 export default function DashboardPage() {
-  const { user, userData, loading } = useAuth();
+  const { user, userData, status } = useAuth();
 
-  if (!user || !userData) {
+  if (status !== 'resolved' || !user || !userData) {
     return null; // The layout handles loading and redirection
   }
   

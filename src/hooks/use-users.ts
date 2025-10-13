@@ -13,20 +13,23 @@ export function useUsers() {
   const [users, setUsers] = useState<UserData[]>([]);
   const [loading, setLoading] = useState(true);
   const db = useFirestore();
-  const { userData, loading: authLoading } = useAuth();
+  const { status, userData } = useAuth();
 
   useEffect(() => {
-    if (authLoading) {
+    // If auth state is still loading, we are also loading.
+    if (status === 'loading') {
       setLoading(true);
       return;
     }
-    
-    if (!userData || userData.role !== 'admin' || !db) {
-        setUsers([]);
-        setLoading(false);
-        return;
+
+    // If auth is resolved but user is not an admin (or not logged in), stop loading and return empty array.
+    if (status !== 'resolved' || !userData || userData.role !== 'admin' || !db) {
+      setUsers([]);
+      setLoading(false);
+      return;
     }
 
+    // Now we are sure we have a logged-in admin.
     const usersCollectionRef = collection(db, 'users');
     const q = query(usersCollectionRef, orderBy('name'));
 
@@ -37,8 +40,7 @@ export function useUsers() {
       });
       setUsers(usersData);
       setLoading(false);
-    }, 
-    (serverError) => {
+    }, (serverError) => {
       const permissionError = new FirestorePermissionError({
         path: usersCollectionRef.path,
         operation: 'list',
@@ -50,7 +52,7 @@ export function useUsers() {
     });
 
     return () => unsubscribe();
-  }, [db, userData, authLoading]);
+  }, [db, status, userData]);
 
   return { users, loading };
 }

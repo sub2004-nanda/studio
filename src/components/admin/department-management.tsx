@@ -91,17 +91,19 @@ export default function DepartmentManagement() {
                         </CardContent>
                     </Card>
                 ))}
-                 <Card className="border-dashed flex flex-col items-center justify-center gap-4 min-h-[260px]">
-                    <div className="text-center">
-                        <h3 className="text-lg font-medium">Create a New Department</h3>
-                        <p className="text-sm text-muted-foreground">Organize your teams and projects.</p>
-                    </div>
-                    <AddDepartmentDialog>
-                        <Button variant="outline">
-                            <UserPlus className="mr-2 h-4 w-4" /> Add Department
-                        </Button>
-                    </AddDepartmentDialog>
-                </Card>
+                 {!loading && (
+                     <Card className="border-dashed flex flex-col items-center justify-center gap-4 min-h-[260px]">
+                        <div className="text-center">
+                            <h3 className="text-lg font-medium">Create a New Department</h3>
+                            <p className="text-sm text-muted-foreground">Organize your teams and projects.</p>
+                        </div>
+                        <AddDepartmentDialog>
+                            <Button variant="outline">
+                                <UserPlus className="mr-2 h-4 w-4" /> Add Department
+                            </Button>
+                        </AddDepartmentDialog>
+                    </Card>
+                 )}
             </div>
         </>
     );

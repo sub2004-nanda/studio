@@ -12,28 +12,23 @@ export default function DashboardLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const { user, loading } = useAuth();
+  const { user, status } = useAuth();
   const router = useRouter();
-  const [isAuthResolved, setIsAuthResolved] = useState(false);
-
+  
   useEffect(() => {
-    if (!loading) {
-      if (!user) {
-        router.push("/login");
-      } else {
-        setIsAuthResolved(true);
-      }
+    if (status === 'unauthenticated') {
+      router.push("/login");
     }
-  }, [user, loading, router]);
+  }, [status, router]);
 
-  if (!isAuthResolved) {
+  if (status === 'loading' || status === 'unauthenticated') {
     return (
       <div className="flex min-h-screen items-center justify-center">
         <Loader2 className="h-12 w-12 animate-spin text-primary" />
       </div>
     );
   }
-
+  
   return (
       <div className="flex min-h-screen w-full flex-col bg-muted/40">
           <DashboardHeader />
