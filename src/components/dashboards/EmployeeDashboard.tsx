@@ -4,7 +4,7 @@
 import { UserData } from "@/hooks/use-auth";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { CheckCircle, ListTodo, Percent, TrendingUp, MessageSquare, Bell, ArrowRight } from "lucide-react";
+import { CheckCircle, ListTodo, Trophy, TrendingUp, MessageSquare, Bell, ArrowRight, Lightbulb } from "lucide-react";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import { Progress } from "@/components/ui/progress";
 import Link from "next/link";
@@ -62,10 +62,11 @@ export default function EmployeeDashboard({ user, userData }: { user: any; userD
                 <p className="text-muted-foreground">Welcome back, {userData?.name}. Here's your productivity overview.</p>
             </div>
             
-            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3 mb-8">
-                <StatCard title="Tasks Completed (This Month)" value="30" icon={CheckCircle} change="+5 from last week" />
+            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4 mb-8">
+                <StatCard title="Tasks Completed (Month)" value="30" icon={CheckCircle} change="+5 from last week" />
                 <StatCard title="Pending Tasks" value="8" icon={ListTodo} />
                 <StatCard title="Overall Performance Score" value="91%" icon={TrendingUp} change="+2% from last month" />
+                <StatCard title="Achievements Unlocked" value="5" icon={Trophy} change="New 'Deadline Hero' badge!" />
             </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-5 gap-8">
@@ -86,28 +87,43 @@ export default function EmployeeDashboard({ user, userData }: { user: any; userD
                         </ResponsiveContainer>
                     </CardContent>
                 </Card>
-
-                <Card className="lg:col-span-2">
-                    <CardHeader>
-                        <CardTitle>My KPI Progress</CardTitle>
-                        <CardDescription>Your progress towards key performance indicators.</CardDescription>
-                    </CardHeader>
-                    <CardContent className="space-y-4">
-                        {kpiData.map(kpi => (
-                            <div key={kpi.name}>
-                                <div className="flex justify-between items-center mb-1">
-                                    <p className="text-sm font-medium">{kpi.name}</p>
-                                    <p className={`text-sm font-bold ${kpi.value >= kpi.target ? 'text-green-600' : 'text-yellow-600'}`}>{kpi.value}% / {kpi.target}%</p>
-                                </div>
-                                <Progress value={kpi.value} />
-                            </div>
-                        ))}
-                         <Button variant="outline" className="w-full mt-4" asChild>
-                            <Link href="/dashboard/goals">View All KPIs & Goals <ArrowRight className="ml-2 h-4 w-4" /></Link>
-                        </Button>
-                    </CardContent>
-                </Card>
                 
+                <div className="lg:col-span-2 space-y-8">
+                    <Card>
+                        <CardHeader>
+                            <CardTitle>My KPI Progress</CardTitle>
+                        </CardHeader>
+                        <CardContent className="space-y-4">
+                            {kpiData.map(kpi => (
+                                <div key={kpi.name}>
+                                    <div className="flex justify-between items-center mb-1">
+                                        <p className="text-sm font-medium">{kpi.name}</p>
+                                        <p className={`text-sm font-bold ${kpi.value >= kpi.target ? 'text-green-600' : 'text-yellow-600'}`}>{kpi.value}% / {kpi.target}%</p>
+                                    </div>
+                                    <Progress value={kpi.value} />
+                                </div>
+                            ))}
+                            <Button variant="outline" className="w-full mt-4" asChild>
+                                <Link href="/dashboard/goals">View All KPIs & Goals <ArrowRight className="ml-2 h-4 w-4" /></Link>
+                            </Button>
+                        </CardContent>
+                    </Card>
+                     <Card>
+                        <CardHeader>
+                            <CardTitle>AI-Powered Insights</CardTitle>
+                        </CardHeader>
+                        <CardContent className="space-y-4">
+                             <div className="flex items-start gap-3">
+                                <Lightbulb className="h-5 w-5 text-yellow-400 mt-1 flex-shrink-0" />
+                                <div>
+                                    <p className="font-medium text-sm">Your Most Productive Time</p>
+                                    <p className="text-muted-foreground text-sm">You complete most tasks between 10 AM and 1 PM. Schedule your deep work then!</p>
+                                </div>
+                            </div>
+                        </CardContent>
+                    </Card>
+                </div>
+
                 <Card className="lg:col-span-3">
                     <CardHeader>
                         <CardTitle>My Ongoing Tasks</CardTitle>
@@ -159,6 +175,9 @@ export default function EmployeeDashboard({ user, userData }: { user: any; userD
                                 </li>
                             ))}
                         </ul>
+                         <Button variant="outline" className="w-full mt-4" asChild>
+                            <Link href="/dashboard/communication">View All Notifications</Link>
+                        </Button>
                     </CardContent>
                 </Card>
             </div>

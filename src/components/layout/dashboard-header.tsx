@@ -3,7 +3,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Home, Bell, Search, FolderKanban, Activity, Users2, Building, Target, CheckSquare, BarChart, MessageSquare, File, Bot, Eye } from "lucide-react";
+import { Home, Bell, Search, FolderKanban, Activity, Users2, Building, Target, CheckSquare, BarChart, MessageSquare, File, Bot, Eye, Mic } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -69,6 +69,7 @@ export default function DashboardHeader() {
     { href: "/dashboard/goals", icon: Target, label: "My Goals", roles: ['employee'] },
     { href: "/dashboard/performance", icon: BarChart, label: "My Performance", roles: ['employee'] },
     { href: "/dashboard/documents", icon: File, label: "My Documents", roles: ['employee'] },
+    { href: "/dashboard/communication", icon: Bell, label: "Notifications", roles: ['employee'] },
   ]
 
   const getNavItems = () => {
@@ -162,6 +163,12 @@ export default function DashboardHeader() {
                     </div>
                 </SheetContent>
             </Sheet>
+        )}
+         {(userData?.role === 'manager' || userData?.role === 'employee') && (
+            <Button variant="outline" size="icon" className="rounded-full">
+                <Mic className="h-5 w-5 text-primary" />
+                <span className="sr-only">Use Voice Commands</span>
+            </Button>
         )}
         <Button variant="ghost" size="icon" className="rounded-full">
             <Bell className="h-5 w-5" />
