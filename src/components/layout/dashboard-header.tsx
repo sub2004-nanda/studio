@@ -3,7 +3,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Bell, Search, FolderKanban, Activity, Users2, Building, Target, CheckSquare, BarChart, MessageSquare, File } from "lucide-react";
+import { Bell, Search, FolderKanban, Activity, Users2, Building, Target, CheckSquare, BarChart, MessageSquare, File, Bot } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -19,6 +19,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { Input } from "../ui/input";
 import Logo from '../icons/logo';
 import { cn } from '@/lib/utils';
+import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from '../ui/sheet';
 
 function getInitials(name: string | null | undefined) {
     if (!name) return 'U';
@@ -48,6 +49,7 @@ export default function DashboardHeader() {
      { href: "/dashboard/goals", icon: Target, label: "Goals", roles: ['admin'] },
      { href: "/dashboard/performance", icon: Activity, label: "Performance", roles: ['admin'] },
      { href: "/dashboard/kpi", icon: Target, label: "KPIs", roles: ['admin'] },
+     { href: "/dashboard/reports", icon: BarChart, label: "Reports", roles: ['admin'] },
   ]
 
   const managerNav = [
@@ -108,6 +110,30 @@ export default function DashboardHeader() {
       </nav>
       
       <div className="flex items-center gap-2 ml-auto">
+        {userData?.role === 'admin' && (
+             <Sheet>
+                <SheetTrigger asChild>
+                    <Button variant="outline" size="icon" className="rounded-full">
+                        <Bot className="h-5 w-5 text-primary" />
+                        <span className="sr-only">Open AI Assistant</span>
+                    </Button>
+                </SheetTrigger>
+                <SheetContent>
+                    <SheetHeader>
+                    <SheetTitle>AI Decision Support Assistant</SheetTitle>
+                    <SheetDescription>
+                        Ask questions or give commands in natural language. The AI will help you find data or perform actions.
+                    </SheetDescription>
+                    </SheetHeader>
+                    <div className="mt-4">
+                        <Input placeholder="e.g., 'Show me top 5 performers this month'" />
+                        <div className="mt-4 p-4 bg-muted/50 rounded-lg text-center">
+                            <p className="text-sm text-muted-foreground">Chat history will appear here.</p>
+                        </div>
+                    </div>
+                </SheetContent>
+            </Sheet>
+        )}
         <Button variant="ghost" size="icon" className="rounded-full">
             <Bell className="h-5 w-5" />
             <span className="sr-only">Toggle notifications</span>
