@@ -60,32 +60,23 @@ export default function DashboardHeader() {
     { href: "/dashboard", icon: Home, label: "Home" },
   ];
 
+  // Simplified navigation links for each role
   const adminNav = [
      { href: "/dashboard/users", icon: Users2, label: "Users" },
-     { href: "/dashboard/departments", icon: Building, label: "Departments"},
-     { href: "/dashboard/projects", icon: FolderKanban, label: "Projects" },
-     { href: "/dashboard/goals", icon: Target, label: "Goals" },
      { href: "/dashboard/performance", icon: Activity, label: "Performance" },
-     { href: "/dashboard/kpi", icon: Target, label: "KPIs" },
-     { href: "/dashboard/reports", icon: BarChart, label: "Reports" },
      { href: "/dashboard/communication", icon: Bell, label: "Alerts" },
-     { href: "/dashboard/privacy", icon: Eye, label: "Privacy" },
   ];
 
   const managerNav = [
     { href: "/dashboard/team", icon: Users2, label: "Team" },
-    { href: "/dashboard/goals", icon: Target, label: "Goals & KPIs" },
     { href: "/dashboard/tasks", icon: CheckSquare, label: "Tasks" },
     { href: "/dashboard/reports", icon: BarChart, label: "Reports" },
-    { href: "/dashboard/communication", icon: Bell, label: "Messages" },
   ];
 
   const employeeNav = [
     { href: "/dashboard/tasks", icon: CheckSquare, label: "My Tasks" },
     { href: "/dashboard/goals", icon: Target, label: "My Goals" },
     { href: "/dashboard/performance", icon: BarChart, label: "My Performance" },
-    { href: "/dashboard/documents", icon: File, label: "My Documents" },
-    { href: "/dashboard/communication", icon: Bell, label: "Notifications" },
   ];
   
   const getNavItems = () => {
