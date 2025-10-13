@@ -63,7 +63,7 @@ export default function EmployeeDashboard({ user, userData }: { user: any; userD
                     href="/dashboard/learning"
                 />
                  <FeatureCard 
-                    title="Personal Coach"
+                    title="Personal AI Guide"
                     description="Get personalized advice and motivational prompts."
                     icon={Bot}
                     href="/dashboard/coach"
