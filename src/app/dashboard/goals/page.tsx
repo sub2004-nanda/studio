@@ -3,7 +3,7 @@
 
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
-import { Target } from "lucide-react";
+import { Target, Lightbulb } from "lucide-react";
 import { useAuth } from "@/hooks/use-auth";
 import GoalAssignment from "@/components/admin/goal-assignment";
 
@@ -21,6 +21,7 @@ const employeeGoals = [
         kpi: "Response Time",
         progress: 85,
         target: 95,
+        aiSuggestion: "Your response time on tickets tagged 'urgent' is slightly lower. Prioritizing these could help you reach your target faster."
     },
     {
         title: "Master New Frontend Framework",
@@ -61,6 +62,14 @@ function EmployeeGoals() {
                                 </div>
                                 <Progress value={goal.progress} />
                             </div>
+                            {goal.aiSuggestion && (
+                                <div className="mt-4 p-3 bg-amber-50 border border-amber-200 rounded-lg text-amber-900">
+                                    <div className="flex items-start gap-2">
+                                        <Lightbulb className="h-4 w-4 mt-0.5" />
+                                        <p className="text-xs"><strong>AI Suggestion:</strong> {goal.aiSuggestion}</p>
+                                    </div>
+                                </div>
+                            )}
                         </CardContent>
                     </Card>
                 ))}
@@ -80,4 +89,3 @@ export default function GoalsPage() {
     // Employees see their own goals
     return <EmployeeGoals />;
 }
-

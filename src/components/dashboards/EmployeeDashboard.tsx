@@ -3,7 +3,7 @@
 
 import { UserData } from "@/hooks/use-auth";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { CheckCircle, ListTodo, Trophy, TrendingUp, MessageSquare, Bell, File, BarChart } from "lucide-react";
+import { CheckCircle, ListTodo, Trophy, TrendingUp, BookOpen, Bot, Award, BarChart, Users } from "lucide-react";
 import { FeatureCard } from "./FeatureCard";
 
 const StatCard = ({ title, value, icon: Icon, change }: { title: string, value: string | number, icon: React.ElementType, change?: string }) => {
@@ -57,17 +57,54 @@ export default function EmployeeDashboard({ user, userData }: { user: any; userD
                     href="/dashboard/performance"
                 />
                  <FeatureCard 
-                    title="My Documents"
-                    description="Manage your personal and work-related documents."
-                    icon={File}
-                    href="/dashboard/documents"
+                    title="My Learning"
+                    description="Access courses and track your skill development."
+                    icon={BookOpen}
+                    href="/dashboard/learning"
                 />
                  <FeatureCard 
-                    title="Notifications"
-                    description="See recent updates, feedback, and announcements."
-                    icon={Bell}
-                    href="/dashboard/communication"
+                    title="AI Coach"
+                    description="Get personalized advice and motivational prompts."
+                    icon={Bot}
+                    href="/dashboard/coach"
                 />
+                 <FeatureCard 
+                    title="Peer Recognition"
+                    description="Acknowledge your colleagues and view team kudos."
+                    icon={Award}
+                    href="/dashboard/recognition"
+                />
+            </div>
+            
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-8">
+                 <Card className="lg:col-span-1">
+                    <CardHeader>
+                        <CardTitle>Team Pulse</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                        <p className="text-sm text-muted-foreground mb-4">How are you feeling about your work this week?</p>
+                        <div className="flex justify-around">
+                            <button className="text-3xl hover:scale-125 transition-transform">😞</button>
+                            <button className="text-3xl hover:scale-125 transition-transform">😐</button>
+                            <button className="text-3xl hover:scale-125 transition-transform">🙂</button>
+                            <button className="text-3xl hover:scale-125 transition-transform">😁</button>
+                        </div>
+                    </CardContent>
+                </Card>
+                 <Card className="lg:col-span-2">
+                    <CardHeader>
+                        <CardTitle>Weekly Workload Forecast</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                        <div className="flex items-center gap-4">
+                            <Bot className="h-8 w-8 text-primary" />
+                            <div>
+                                <p className="font-medium">Your upcoming week looks manageable.</p>
+                                <p className="text-sm text-muted-foreground">AI predicts you have a 75% chance to complete all scheduled tasks on time. Friday appears to be your busiest day.</p>
+                            </div>
+                        </div>
+                    </CardContent>
+                </Card>
             </div>
         </>
     );

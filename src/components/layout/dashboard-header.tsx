@@ -3,7 +3,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Bell, Search, Bot, Mic, Menu, Home, Users2, Building, FolderKanban, Target, Activity, CheckSquare, BarChart, File, Eye } from "lucide-react";
+import { Bell, Search, Bot, Mic, Menu, Home, Users2, Building, FolderKanban, Target, Activity, CheckSquare, BarChart, File, Eye, BookOpen, Award } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -60,7 +60,6 @@ export default function DashboardHeader() {
     { href: "/dashboard", icon: Home, label: "Home" },
   ];
 
-  // Simplified navigation links for each role
   const adminNav = [
      { href: "/dashboard/users", icon: Users2, label: "Users" },
      { href: "/dashboard/performance", icon: Activity, label: "Performance" },
@@ -76,7 +75,7 @@ export default function DashboardHeader() {
   const employeeNav = [
     { href: "/dashboard/tasks", icon: CheckSquare, label: "My Tasks" },
     { href: "/dashboard/goals", icon: Target, label: "My Goals" },
-    { href: "/dashboard/performance", icon: BarChart, label: "My Performance" },
+    { href: "/dashboard/learning", icon: BookOpen, label: "My Learning" },
   ];
   
   const getNavItems = () => {
