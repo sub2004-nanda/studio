@@ -4,7 +4,7 @@
 import { UserData } from "@/hooks/use-auth";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Users, Target, CheckSquare, BarChart as BarChartIcon, Bell, ArrowRight, TrendingUp, Users2, Activity, Lightbulb, Bot } from "lucide-react";
+import { Users, Target, CheckSquare, BarChart as BarChartIcon, Bell, ArrowRight, TrendingUp, Users2, Activity, Lightbulb, Bot, Trophy } from "lucide-react";
 import Link from "next/link";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, LineChart, Line } from 'recharts';
 import ProductivityHeatmap from "./ProductivityHeatmap";
@@ -112,8 +112,8 @@ export default function ManagerDashboard({ user, userData }: { user: any; userDa
                          <div className="flex items-start gap-3">
                             <Lightbulb className="h-5 w-5 text-yellow-400 mt-1" />
                             <div>
-                                <p className="font-medium text-sm">Training Opportunity</p>
-                                <p className="text-muted-foreground text-sm">Team B is showing lower accuracy. A refresher session might be helpful.</p>
+                                <p className="font-medium text-sm">Sentiment Analysis</p>
+                                <p className="text-muted-foreground text-sm">Sentiment analysis suggests "Employee Y" may be feeling overwhelmed. A quick check-in could be beneficial.</p>
                             </div>
                         </div>
                     </CardContent>
@@ -149,21 +149,21 @@ export default function ManagerDashboard({ user, userData }: { user: any; userDa
                     href="/dashboard/tasks"
                 />
                 <FeatureCard
-                    title="Reports"
-                    description="Generate and view performance reports."
+                    title="AI Reports & Analytics"
+                    description="Generate AI-summarized performance reports."
                     icon={BarChartIcon}
                     href="/dashboard/reports"
                 />
                  <FeatureCard
                     title="Communication"
-                    description="Send announcements and messages to your team."
+                    description="Send announcements and monitor team sentiment."
                     icon={Bell}
                     href="/dashboard/communication"
                 />
                  <FeatureCard
-                    title="Goals & KPIs"
-                    description="Set and track department and individual goals."
-                    icon={Target}
+                    title="Leaderboards & Badges"
+                    description="Boost motivation with gamified goals and KPIs."
+                    icon={Trophy}
                     href="/dashboard/goals"
                 />
             </div>
