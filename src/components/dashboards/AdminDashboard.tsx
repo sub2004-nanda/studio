@@ -3,20 +3,62 @@
 
 import { UserData } from "@/hooks/use-auth";
 import { Button } from "@/components/ui/button";
-import { auth } from "@/lib/firebase";
+import { auth, db } from "@/lib/firebase";
+import { doc, updateDoc } from "firebase/firestore";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Shield, LogOut } from "lucide-react";
+import { Shield, LogOut, UserPlus, MoreVertical, Edit } from "lucide-react";
 import { useUsers } from "@/hooks/use-users";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { AddUserDialog } from "@/components/admin/add-user-dialog";
+import { useToast } from "@/hooks/use-toast";
 
 function getInitials(name: string) {
-  return name.split(' ').map(n => n[0]).join('');
+  if (!name) return 'U';
+  return name.split(' ').map(n => n[0]).join('').toUpperCase();
 }
 
 export default function AdminDashboard({ user, userData }: { user: any; userData: UserData | null; }) {
     const { users, loading } = useUsers();
+    const { toast } = useToast();
+
+    const handleRoleChange = async (uid: string, role: UserData['role']) => {
+        try {
+            const userDocRef = doc(db, "users", uid);
+            await updateDoc(userDocRef, { role });
+            toast({
+                title: "User Updated",
+                description: `User role has been changed to ${role}.`,
+            });
+        } catch (error) {
+            console.error("Error updating user role:", error);
+            toast({
+                title: "Error",
+                description: "Could not update user role.",
+                variant: "destructive",
+            });
+        }
+    };
+    
+    const handleStatusChange = async (uid: string, status: UserData['status']) => {
+        try {
+            const userDocRef = doc(db, "users", uid);
+            await updateDoc(userDocRef, { status });
+            toast({
+                title: "User Updated",
+                description: `User status has been changed to ${status}.`,
+            });
+        } catch (error) {
+            console.error("Error updating user status:", error);
+            toast({
+                title: "Error",
+                description: "Could not update user status.",
+                variant: "destructive",
+            });
+        }
+    };
 
     return (
         <div className="flex min-h-screen flex-col bg-muted/40">
@@ -38,9 +80,17 @@ export default function AdminDashboard({ user, userData }: { user: any; userData
             </header>
             <main className="flex-1 p-4 sm:px-6 sm:py-0">
                 <Card>
-                    <CardHeader>
-                        <CardTitle>User Management</CardTitle>
-                        <CardDescription>View and manage all users in the system.</CardDescription>
+                    <CardHeader className="flex flex-row items-center justify-between">
+                        <div>
+                            <CardTitle>User Management</CardTitle>
+                            <CardDescription>View, add, and manage all users in the system.</CardDescription>
+                        </div>
+                        <AddUserDialog>
+                            <Button>
+                                <UserPlus className="mr-2 h-4 w-4" />
+                                Add User
+                            </Button>
+                        </AddUserDialog>
                     </CardHeader>
                     <CardContent>
                          <Table>
@@ -81,15 +131,29 @@ export default function AdminDashboard({ user, userData }: { user: any; userData
                                                 </Badge>
                                             </TableCell>
                                             <TableCell>
-                                                 <Badge
-                                                    variant={u.status === 'approved' ? 'secondary' : 'destructive'}
-                                                    className="capitalize bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-100"
+                                                <Badge
+                                                    variant={u.status === 'approved' ? 'default' : u.status === 'pending_approval' ? 'secondary' : 'destructive'}
+                                                    className={`capitalize ${u.status === 'approved' ? 'bg-green-100 text-green-800' : u.status === 'pending_approval' ? 'bg-yellow-100 text-yellow-800' : 'bg-red-100 text-red-800'}`}
                                                 >
-                                                    {u.status.replace('_', ' ')}
+                                                    {u.status.replace(/_/g, ' ')}
                                                 </Badge>
                                             </TableCell>
                                             <TableCell className="text-right">
-                                                <Button variant="ghost" size="sm">Manage</Button>
+                                                <DropdownMenu>
+                                                    <DropdownMenuTrigger asChild>
+                                                        <Button variant="ghost" size="icon">
+                                                            <MoreVertical className="h-4 w-4" />
+                                                        </Button>
+                                                    </DropdownMenuTrigger>
+                                                    <DropdownMenuContent align="end">
+                                                        <DropdownMenuItem onSelect={() => handleRoleChange(u.uid, 'admin')}>Assign as Admin</DropdownMenuItem>
+                                                        <DropdownMenuItem onSelect={() => handleRoleChange(u.uid, 'manager')}>Assign as Manager</DropdownMenuItem>
+                                                        <DropdownMenuItem onSelect={() => handleRoleChange(u.uid, 'employee')}>Assign as Employee</DropdownMenuItem>
+                                                        <DropdownMenuItem onSelect={() => handleStatusChange(u.uid, 'approved')}>Approve User</DropdownMenuItem>
+                                                        <DropdownMenuItem onSelect={() => handleStatusChange(u.uid, 'pending_approval')}>Set as Pending</DropdownMenuItem>
+                                                        <DropdownMenuItem onSelect={() => handleStatusChange(u.uid, 'rejected')}>Reject User</DropdownMenuItem>
+                                                    </DropdownMenuContent>
+                                                </DropdownMenu>
                                             </TableCell>
                                         </TableRow>
                                     ))
