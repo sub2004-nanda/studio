@@ -18,6 +18,13 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
 import { Input } from '@/components/ui/input';
 import { useToast } from '@/hooks/use-toast';
 import { auth, db } from '@/lib/firebase';
@@ -28,6 +35,7 @@ const formSchema = z.object({
   name: z.string().min(2, { message: 'Name must be at least 2 characters.' }),
   email: z.string().email({ message: 'Please enter a valid email.' }),
   password: z.string().min(6, { message: 'Password must be at least 6 characters.' }),
+  role: z.enum(['employee', 'manager'], { required_error: 'Please select a role.' }),
 });
 
 export default function SignupForm() {
@@ -42,6 +50,7 @@ export default function SignupForm() {
       name: '',
       email: '',
       password: '',
+      role: 'employee',
     },
   });
 
@@ -58,8 +67,8 @@ export default function SignupForm() {
         uid: user.uid,
         name: values.name,
         email: values.email,
-        role: 'employee', // Assign default role
-        status: 'approved', // Set status to approved
+        role: values.role, // Assign selected role
+        status: 'approved', // Set status to approved by default
       });
       
       toast({
@@ -126,6 +135,27 @@ export default function SignupForm() {
               <FormControl>
                 <Input type="password" placeholder="••••••••" {...field} />
               </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="role"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Your Role</FormLabel>
+              <Select onValueChange={field.onChange} defaultValue={field.value}>
+                <FormControl>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select your role" />
+                  </SelectTrigger>
+                </FormControl>
+                <SelectContent>
+                  <SelectItem value="employee">Employee</SelectItem>
+                  <SelectItem value="manager">Manager</SelectItem>
+                </SelectContent>
+              </Select>
               <FormMessage />
             </FormItem>
           )}
