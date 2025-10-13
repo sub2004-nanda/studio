@@ -7,7 +7,7 @@ import { useAuth as useFirebaseAuth, useFirestore } from "@/firebase/provider";
 import { doc, updateDoc } from "firebase/firestore";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Shield, LogOut, UserPlus, MoreVertical, Edit, Activity, Users, CheckCircle, TrendingUp } from "lucide-react";
+import { Shield, LogOut, UserPlus, MoreVertical, Activity, Users } from "lucide-react";
 import { useUsers } from "@/hooks/use-users";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -18,6 +18,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import PerformanceOverview from "@/components/admin/performance-overview";
 import { errorEmitter } from "@/firebase/error-emitter";
 import { FirestorePermissionError, SecurityRuleContext } from "@/firebase/errors";
+import AssignProject from "../admin/assign-project";
 
 function getInitials(name: string) {
   if (!name) return 'U';
@@ -117,6 +118,7 @@ export default function AdminDashboard({ user, userData }: { user: any; userData
     const { toast } = useToast();
     const db = useFirestore();
     const auth = useFirebaseAuth();
+    const managers = users.filter(u => u.role === 'manager');
 
     const handleLogout = () => {
         if (auth) {
@@ -209,13 +211,14 @@ export default function AdminDashboard({ user, userData }: { user: any; userData
                     <TabsContent value="overview">
                         <PerformanceOverview />
                     </TabsContent>
-                    <TabsContent value="users">
+                    <TabsContent value="users" className="space-y-4">
                         <UserManagementTable 
                             users={users} 
                             loading={loading}
                             onRoleChange={handleRoleChange}
                             onStatusChange={handleStatusChange}
                         />
+                        <AssignProject managers={managers} />
                     </TabsContent>
                 </Tabs>
             </main>
