@@ -2,7 +2,7 @@
 "use client";
 
 import { UserData } from "@/hooks/use-auth";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Users, Target, CheckSquare, BarChart as BarChartIcon, Bell, TrendingUp, Users2, Activity, Bot, Trophy, Mic, Eye } from "lucide-react";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import ProductivityHeatmap from "./ProductivityHeatmap";
