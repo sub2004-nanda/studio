@@ -4,6 +4,7 @@
 import { useState, useEffect } from 'react';
 import { collection, onSnapshot, query, orderBy, DocumentData } from 'firebase/firestore';
 import { useFirestore } from '@/firebase/provider';
+import { useAuth } from './use-auth';
 import { errorEmitter } from '@/firebase/error-emitter';
 import { FirestorePermissionError, SecurityRuleContext } from '@/firebase/errors';
 
@@ -17,11 +18,19 @@ export function useDepartments() {
   const [departments, setDepartments] = useState<Department[]>([]);
   const [loading, setLoading] = useState(true);
   const db = useFirestore();
+  const { userData } = useAuth();
 
   useEffect(() => {
-    if (!db) {
+    if (!db || !userData) {
       setLoading(false);
       return;
+    }
+
+    // Only admins should be able to fetch all departments
+    if (userData.role !== 'admin') {
+        setDepartments([]);
+        setLoading(false);
+        return;
     }
 
     const departmentsCollectionRef = collection(db, 'departments');
@@ -47,7 +56,7 @@ export function useDepartments() {
     });
 
     return () => unsubscribe();
-  }, [db]);
+  }, [db, userData]);
 
   return { departments, loading };
 }

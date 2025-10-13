@@ -5,6 +5,7 @@ import { useState, useEffect } from 'react';
 import { collection, onSnapshot, query, orderBy } from 'firebase/firestore';
 import { useFirestore } from '@/firebase/provider';
 import type { UserData } from './use-auth';
+import { useAuth } from './use-auth';
 import { errorEmitter } from '@/firebase/error-emitter';
 import { FirestorePermissionError, SecurityRuleContext } from '@/firebase/errors';
 
@@ -12,9 +13,17 @@ export function useUsers() {
   const [users, setUsers] = useState<UserData[]>([]);
   const [loading, setLoading] = useState(true);
   const db = useFirestore();
+  const { userData } = useAuth();
 
   useEffect(() => {
-    if (!db) {
+    if (!db || !userData) {
+      setLoading(false);
+      return;
+    }
+
+    // Only admins should be able to fetch all users
+    if (userData.role !== 'admin') {
+      setUsers([]);
       setLoading(false);
       return;
     }
@@ -42,7 +51,7 @@ export function useUsers() {
     });
 
     return () => unsubscribe();
-  }, [db]);
+  }, [db, userData]);
 
   return { users, loading };
 }
