@@ -8,7 +8,6 @@ import {
   Users2,
   FolderKanban,
   Activity,
-  User,
   Target,
   CheckSquare,
   BarChart
@@ -60,7 +59,7 @@ export default function DashboardHeader() {
     { href: "/dashboard/goals", icon: Target, label: "Goals", roles: ['manager'] },
     { href: "/dashboard/tasks", icon: CheckSquare, label: "Tasks", roles: ['manager'] },
     { href: "/dashboard/reports", icon: BarChart, label: "Reports", roles: ['manager'] },
-    { href: "/dashboard/communication", icon: Bell, label: "Messeges", roles: ['manager'] },
+    { href: "/dashboard/communication", icon: Bell, label: "Messages", roles: ['manager'] },
   ]
 
   const getNav = () => {
