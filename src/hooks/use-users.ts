@@ -20,11 +20,11 @@ export function useUsers() {
       setLoading(true);
       return;
     }
-
-    if (!db || !userData || userData.role !== 'admin') {
-      setUsers([]);
-      setLoading(false);
-      return;
+    
+    if (!userData || userData.role !== 'admin' || !db) {
+        setUsers([]);
+        setLoading(false);
+        return;
     }
 
     const usersCollectionRef = collection(db, 'users');

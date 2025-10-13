@@ -12,6 +12,7 @@ export interface Department {
   id: string;
   name: string;
   managerUid?: string;
+  departmentId?: string;
 }
 
 export function useDepartments() {
@@ -26,7 +27,7 @@ export function useDepartments() {
         return;
     }
 
-    if (!db || !userData || userData.role !== 'admin') {
+    if (!userData || userData.role !== 'admin' || !db) {
         setDepartments([]);
         setLoading(false);
         return;
