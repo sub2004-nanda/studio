@@ -9,7 +9,9 @@ import { auth } from "@/lib/firebase";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Loader2 } from "lucide-react";
 import Logo from "@/components/icons/logo";
-import { Badge } from "@/components/ui/badge";
+import AdminDashboard from "@/components/dashboards/AdminDashboard";
+import ManagerDashboard from "@/components/dashboards/ManagerDashboard";
+import EmployeeDashboard from "@/components/dashboards/EmployeeDashboard";
 
 function PendingApproval({ user }: { user: any; }) {
   return (
@@ -35,33 +37,6 @@ function PendingApproval({ user }: { user: any; }) {
   );
 }
 
-function MainDashboard({ user, userData }: { user: any; userData: UserData | null }) {
-    return (
-        <div className="flex min-h-screen flex-col items-center justify-center bg-background p-4 text-center">
-            <Card className="w-full max-w-2xl">
-                <CardHeader>
-                    <CardTitle className="font-headline text-3xl">Dashboard</CardTitle>
-                    <CardDescription>Welcome back, {user.displayName || userData?.name}!</CardDescription>
-                </CardHeader>
-                <CardContent>
-                    <div className="mb-6 text-center">
-                      <p className="text-lg text-muted-foreground">You are logged in and your dashboard is ready.</p>
-                    </div>
-                    
-                    <div className="flex items-center justify-center space-x-2 mb-8">
-                        <p className="text-md">Your Role:</p>
-                        <Badge variant="secondary" className="text-md capitalize">
-                            {userData?.role || 'Not Assigned'}
-                        </Badge>
-                    </div>
-
-                    <Button onClick={() => auth.signOut()}>Logout</Button>
-                </CardContent>
-            </Card>
-        </div>
-    );
-}
-
 export default function DashboardPage() {
   const { user, userData, loading } = useAuth();
   const router = useRouter();
@@ -80,13 +55,27 @@ export default function DashboardPage() {
     );
   }
 
-  if (!user) {
-    return null; // Redirection is handled by the effect
+  if (!user || !userData) {
+    return null; // Redirection is handled by the effect or still loading
   }
   
-  if (userData?.status === 'pending_approval') {
+  if (userData.status === 'pending_approval') {
       return <PendingApproval user={user} />;
   }
 
-  return <MainDashboard user={user} userData={userData} />;
+  const renderDashboard = () => {
+    switch (userData.role) {
+      case 'admin':
+        return <AdminDashboard user={user} userData={userData} />;
+      case 'manager':
+        return <ManagerDashboard user={user} userData={userData} />;
+      case 'employee':
+        return <EmployeeDashboard user={user} userData={userData} />;
+      default:
+        // Fallback for unassigned roles or other cases
+        return <EmployeeDashboard user={user} userData={userData} />;
+    }
+  }
+
+  return renderDashboard();
 }
