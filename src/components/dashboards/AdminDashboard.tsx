@@ -4,10 +4,11 @@
 import { UserData } from "@/hooks/use-auth";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Users, FolderKanban, Activity, ArrowRight, Building, UserCheck, Target, Bot, Bell, Eye } from "lucide-react";
+import { Users, FolderKanban, Activity, ArrowRight, Building, UserCheck, Target, Bot, Bell, Eye, Loader2 } from "lucide-react";
 import Link from "next/link";
 import { useUsers } from "@/hooks/use-users";
 import { useDepartments } from "@/hooks/use-departments";
+import { useAuth } from "@/hooks/use-auth";
 
 const AdminFeatureCard = ({ title, description, icon: Icon, href }: { title: string, description: string, icon: React.ElementType, href: string }) => {
     return (
@@ -46,9 +47,10 @@ const StatCard = ({ title, value, icon: Icon }: { title: string, value: string |
     );
 };
 
-export default function AdminDashboard({ user, userData }: { user: any; userData: UserData | null; }) {
+function AdminDashboardContent({ user, userData }: { user: any; userData: UserData | null; }) {
     const { users, loading: usersLoading } = useUsers();
     const { departments, loading: departmentsLoading } = useDepartments();
+    const loading = usersLoading || departmentsLoading;
 
     return (
         <>
@@ -57,8 +59,8 @@ export default function AdminDashboard({ user, userData }: { user: any; userData
                 <p className="text-muted-foreground">Welcome back, {userData?.name}. Here's your admin overview.</p>
             </div>
              <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4 mb-8">
-                <StatCard title="Total Employees" value={usersLoading ? '...' : users.length} icon={UserCheck} />
-                <StatCard title="Departments" value={departmentsLoading ? '...' : departments.length} icon={Building} />
+                <StatCard title="Total Employees" value={loading ? '...' : users.length} icon={UserCheck} />
+                <StatCard title="Departments" value={loading ? '...' : departments.length} icon={Building} />
             </div>
             <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
                 <AdminFeatureCard
@@ -118,4 +120,18 @@ export default function AdminDashboard({ user, userData }: { user: any; userData
             </div>
         </>
     );
+}
+
+export default function AdminDashboard({ user, userData }: { user: any; userData: UserData | null; }) {
+    const { status } = useAuth();
+
+    if (status === 'loading') {
+        return (
+            <div className="flex items-center justify-center h-64">
+                <Loader2 className="h-8 w-8 animate-spin text-primary" />
+            </div>
+        );
+    }
+    
+    return <AdminDashboardContent user={user} userData={userData} />;
 }

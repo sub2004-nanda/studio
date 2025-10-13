@@ -18,6 +18,7 @@ import { useFirestore } from '@/firebase/provider';
 import { UserData } from '@/hooks/use-auth';
 import { errorEmitter } from '@/firebase/error-emitter';
 import { FirestorePermissionError, SecurityRuleContext } from '@/firebase/errors';
+import { useUsers } from '@/hooks/use-users';
 
 const formSchema = z.object({
   managerUid: z.string({ required_error: 'Please select a manager.' }),
@@ -25,7 +26,7 @@ const formSchema = z.object({
   projectDescription: z.string().min(10, { message: 'Description must be at least 10 characters.' }),
 });
 
-export default function AssignProject({ managers }: { managers: UserData[] }) {
+function AssignProjectContent({ managers }: { managers: UserData[] }) {
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
   const db = useFirestore();
@@ -164,4 +165,21 @@ export default function AssignProject({ managers }: { managers: UserData[] }) {
         </CardContent>
     </Card>
   );
+}
+
+
+export default function AssignProject() {
+    const { users, loading } = useUsers();
+    
+    if (loading) {
+        return (
+            <Card className="flex items-center justify-center h-64">
+                <Loader2 className="h-8 w-8 animate-spin text-primary" />
+            </Card>
+        )
+    }
+
+    const managers = users.filter(u => u.role === 'manager');
+
+    return <AssignProjectContent managers={managers} />
 }

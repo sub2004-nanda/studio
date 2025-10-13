@@ -9,6 +9,7 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 import { useDepartments } from "@/hooks/use-departments";
 import { useUsers } from "@/hooks/use-users";
 import { useMemo } from "react";
+import { useAuth } from "@/hooks/use-auth";
 
 const DepartmentStat = ({ icon: Icon, label, value }: { icon: React.ElementType, label: string, value: string | number }) => (
     <div className="flex items-center gap-2 text-sm text-muted-foreground">
@@ -17,11 +18,12 @@ const DepartmentStat = ({ icon: Icon, label, value }: { icon: React.ElementType,
     </div>
 )
 
-export default function DepartmentManagement() {
+function DepartmentManagementContent() {
     const { departments, loading: departmentsLoading } = useDepartments();
     const { users, loading: usersLoading } = useUsers();
 
     const departmentsWithDetails = useMemo(() => {
+        if (departmentsLoading || usersLoading) return [];
         return departments.map(dept => {
             const manager = users.find(u => u.uid === dept.managerUid);
             const employeeCount = users.filter(u => u.departmentId === dept.id).length;
@@ -34,7 +36,7 @@ export default function DepartmentManagement() {
                 projects: 0
             }
         })
-    }, [departments, users]);
+    }, [departments, users, departmentsLoading, usersLoading]);
 
     const loading = departmentsLoading || usersLoading;
 
@@ -108,3 +110,31 @@ export default function DepartmentManagement() {
         </>
     );
 }
+
+
+export default function DepartmentManagement() {
+    const { userData, status } = useAuth();
+
+    if (status === 'loading') {
+        return (
+            <div className="flex items-center justify-center h-64">
+                <Loader2 className="h-8 w-8 animate-spin text-primary" />
+            </div>
+        )
+    }
+
+    if (userData?.role === 'admin') {
+        return <DepartmentManagementContent />;
+    }
+
+    // Fallback for non-admins, though they shouldn't reach this page via nav.
+    return (
+        <Card>
+            <CardHeader>
+                <CardTitle>Access Denied</CardTitle>
+                <CardDescription>You do not have permission to view this page.</CardDescription>
+            </CardHeader>
+        </Card>
+    );
+}
+
