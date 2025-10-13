@@ -55,12 +55,27 @@ export default function LoginForm() {
       router.push('/dashboard');
     } catch (error: any) {
       const errorCode = error.code;
-      let friendlyMessage = error.message || 'An unexpected error occurred. Please try again.';
-      if (errorCode === 'auth/wrong-password' || errorCode === 'auth/user-not-found' || errorCode === 'auth/invalid-credential') {
-        friendlyMessage = 'Invalid email or password. Please check your credentials and try again.';
-      } else if (errorCode === 'auth/invalid-api-key') {
-        friendlyMessage = 'There is a configuration problem with the API key. Please contact support.';
+      let friendlyMessage = 'An unexpected error occurred. Please try again.';
+      
+      switch (errorCode) {
+        case 'auth/user-not-found':
+          friendlyMessage = 'No account found with this email address. Please sign up first.';
+          break;
+        case 'auth/wrong-password':
+          friendlyMessage = 'Incorrect password. Please try again.';
+          break;
+        case 'auth/invalid-credential':
+           friendlyMessage = 'Invalid email or password. Please check your credentials and try again.';
+           break;
+        case 'auth/invalid-api-key':
+        case 'auth/configuration-not-found':
+          friendlyMessage = 'There is a configuration problem with the application. Please contact support.';
+          break;
+        default:
+          friendlyMessage = error.message;
+          break;
       }
+      
       setError(friendlyMessage);
     } finally {
       setIsLoading(false);
