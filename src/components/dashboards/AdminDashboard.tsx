@@ -4,7 +4,7 @@
 import { UserData } from "@/hooks/use-auth";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Users, FolderKanban, Activity, ArrowRight, Building, UserCheck } from "lucide-react";
+import { Users, FolderKanban, Activity, ArrowRight, Building, UserCheck, Target } from "lucide-react";
 import Link from "next/link";
 import { useUsers } from "@/hooks/use-users";
 
@@ -85,6 +85,12 @@ export default function AdminDashboard({ user, userData }: { user: any; userData
                     description="Monitor real-time productivity."
                     icon={Activity}
                     href="/dashboard/performance"
+                />
+                <AdminFeatureCard
+                    title="KPI Management"
+                    description="Define and standardize KPIs for roles."
+                    icon={Target}
+                    href="/dashboard/kpi"
                 />
             </div>
         </>
