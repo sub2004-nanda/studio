@@ -86,14 +86,12 @@ export default function DashboardSidebar({ isMobile, onLinkClick }: { isMobile?:
         </div>
     </div>
   )
-
+  
+  // This component is now only used for the mobile sheet view in the header.
+  // The main desktop sidebar is no longer rendered from the layout.
   if (isMobile) {
     return <SidebarContent />;
   }
 
-  return (
-    <div className="hidden border-r bg-background md:block">
-      <SidebarContent />
-    </div>
-  );
+  return null;
 }

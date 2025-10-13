@@ -3,7 +3,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Bell, Search, Bot, Mic } from "lucide-react";
+import { Bell, Search, Bot, Mic, Menu, Home, Users2, Building, FolderKanban, Target, Activity, CheckSquare, BarChart, File, Eye } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -18,9 +18,25 @@ import { useAuth } from "@/hooks/use-auth";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { Input } from "../ui/input";
 import { Sheet, SheetContent, SheetTrigger } from '../ui/sheet';
-import { Menu } from 'lucide-react';
-import React from 'react';
-import DashboardSidebar from './dashboard-sidebar';
+import React, { useState } from 'react';
+import Logo from '../icons/logo';
+import { cn } from '@/lib/utils';
+
+const NavLink = ({ href, icon: Icon, label, pathname, isMobile, onClick }: { href: string, icon: React.ElementType, label: string, pathname: string, isMobile?: boolean, onClick?: () => void }) => (
+    <Link
+        href={href}
+        className={cn(
+            "flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary",
+            pathname === href && "bg-muted text-primary",
+            "text-sm font-medium" // For horizontal nav
+        )}
+        onClick={onClick}
+    >
+        <Icon className="h-4 w-4" />
+        {label}
+    </Link>
+);
+
 
 function getInitials(name: string | null | undefined) {
     if (!name) return 'U';
@@ -31,95 +47,136 @@ function getInitials(name: string | null | undefined) {
 export default function DashboardHeader() {
   const auth = useFirebaseAuth();
   const { user, userData } = useAuth();
+  const pathname = usePathname();
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const handleLogout = () => {
     if (auth) {
       auth.signOut();
     }
   };
+
+  const baseNav = [
+    { href: "/dashboard", icon: Home, label: "Home" },
+  ];
+
+  const adminNav = [
+     { href: "/dashboard/users", icon: Users2, label: "Users" },
+     { href: "/dashboard/departments", icon: Building, label: "Departments"},
+     { href: "/dashboard/projects", icon: FolderKanban, label: "Projects" },
+     { href: "/dashboard/goals", icon: Target, label: "Goals" },
+     { href: "/dashboard/performance", icon: Activity, label: "Performance" },
+     { href: "/dashboard/kpi", icon: Target, label: "KPIs" },
+     { href: "/dashboard/reports", icon: BarChart, label: "Reports" },
+     { href: "/dashboard/communication", icon: Bell, label: "Alerts" },
+     { href: "/dashboard/privacy", icon: Eye, label: "Privacy" },
+  ];
+
+  const managerNav = [
+    { href: "/dashboard/team", icon: Users2, label: "Team" },
+    { href: "/dashboard/goals", icon: Target, label: "Goals & KPIs" },
+    { href: "/dashboard/tasks", icon: CheckSquare, label: "Tasks" },
+    { href: "/dashboard/reports", icon: BarChart, label: "Reports" },
+    { href: "/dashboard/communication", icon: Bell, label: "Messages" },
+  ];
+
+  const employeeNav = [
+    { href: "/dashboard/tasks", icon: CheckSquare, label: "My Tasks" },
+    { href: "/dashboard/goals", icon: Target, label: "My Goals" },
+    { href: "/dashboard/performance", icon: BarChart, label: "My Performance" },
+    { href: "/dashboard/documents", icon: File, label: "My Documents" },
+    { href: "/dashboard/communication", icon: Bell, label: "Notifications" },
+  ];
+  
+  const getNavItems = () => {
+    const role = userData?.role;
+    if (role === 'admin') return [...baseNav, ...adminNav];
+    if (role === 'manager') return [...baseNav, ...managerNav];
+    if (role === 'employee') return [...baseNav, ...employeeNav];
+    return baseNav;
+  }
+
+  const currentNavItems = getNavItems();
   
   return (
-    <header className="flex h-14 items-center gap-4 border-b bg-background px-4 lg:h-[60px] lg:px-6 sticky top-0 z-30">
-       <Sheet>
-          <SheetTrigger asChild>
-            <Button
-              variant="outline"
-              size="icon"
-              className="shrink-0 md:hidden"
-            >
-              <Menu className="h-5 w-5" />
-              <span className="sr-only">Toggle navigation menu</span>
-            </Button>
-          </SheetTrigger>
-          <SheetContent side="left" className="flex flex-col p-0">
-             <DashboardSidebar isMobile={true} />
-          </SheetContent>
-        </Sheet>
-       
-      <div className="w-full flex-1">
-         <form>
-          <div className="relative">
-            <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-            <Input
-              type="search"
-              placeholder="Search..."
-              className="w-full appearance-none bg-background pl-8 shadow-none md:w-2/3 lg:w-1/3"
-            />
-          </div>
-        </form>
-      </div>
-      
-      <div className="flex items-center gap-2 ml-2">
-        {userData?.role === 'admin' && (
-             <Sheet>
-                <SheetTrigger asChild>
-                    <Button variant="outline" size="icon" className="rounded-full">
-                        <Bot className="h-5 w-5 text-primary" />
-                        <span className="sr-only">Open AI Assistant</span>
-                    </Button>
-                </SheetTrigger>
-                <SheetContent>
-                    <div className="p-4">
-                        <h3 className="font-semibold">AI Decision Support Assistant</h3>
-                        <p className="text-sm text-muted-foreground mt-1">
-                            Ask questions or give commands in natural language. The AI will help you find data or perform actions.
-                        </p>
-                        <Input placeholder="e.g., 'Show me top 5 performers'" className="mt-4" />
-                        <div className="mt-4 p-4 bg-muted/50 rounded-lg text-center h-64">
-                            <p className="text-sm text-muted-foreground">Chat history will appear here.</p>
-                        </div>
-                    </div>
-                </SheetContent>
+    <header className="sticky top-0 z-30 flex h-auto md:h-14 items-center gap-4 border-b bg-background px-4 sm:static sm:h-auto sm:border-0 sm:bg-transparent sm:px-6 flex-wrap">
+      <div className="flex h-14 items-center w-full">
+         <Sheet open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen}>
+            <SheetTrigger asChild>
+                <Button
+                variant="outline"
+                size="icon"
+                className="shrink-0 md:hidden"
+                >
+                <Menu className="h-5 w-5" />
+                <span className="sr-only">Toggle navigation menu</span>
+                </Button>
+            </SheetTrigger>
+            <SheetContent side="left" className="flex flex-col">
+                 <nav className="grid gap-2 text-lg font-medium">
+                    <Link
+                        href="/dashboard"
+                        className="flex items-center gap-2 text-lg font-semibold mb-4"
+                        onClick={() => setIsMobileMenuOpen(false)}
+                    >
+                        <Logo className="h-6 w-6 text-primary" />
+                        <span className="">ProductivityPulse</span>
+                    </Link>
+                    {currentNavItems.map(item => (
+                        <NavLink key={item.href} {...item} pathname={pathname} isMobile onClick={() => setIsMobileMenuOpen(false)} />
+                    ))}
+                </nav>
+            </SheetContent>
             </Sheet>
-        )}
-         {(userData?.role === 'manager' || userData?.role === 'employee') && (
-            <Button variant="outline" size="icon" className="rounded-full">
-                <Mic className="h-5 w-5 text-primary" />
-                <span className="sr-only">Use Voice Commands</span>
-            </Button>
-        )}
-        <Button variant="ghost" size="icon" className="rounded-full">
-            <Bell className="h-5 w-5" />
-            <span className="sr-only">Toggle notifications</span>
-        </Button>
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="outline" size="icon" className="overflow-hidden rounded-full">
-                <Avatar>
-                    <AvatarImage src={`https://avatar.vercel.sh/${user?.email}.png`} alt={userData?.name} />
-                    <AvatarFallback>{getInitials(userData?.name)}</AvatarFallback>
-                </Avatar>
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuLabel>{userData?.name || 'My Account'}</DropdownMenuLabel>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem asChild><Link href="/dashboard/settings">Settings</Link></DropdownMenuItem>
-            <DropdownMenuItem asChild><Link href="/dashboard/support">Support</Link></DropdownMenuItem>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem onClick={handleLogout}>Logout</DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
+
+            <div className="hidden md:flex items-center gap-2">
+                <Link href="/dashboard" className="flex items-center gap-2 font-semibold mr-4">
+                    <Logo className="h-6 w-6 text-primary" />
+                    <span className="">ProductivityPulse</span>
+                </Link>
+                <nav className="hidden flex-col gap-6 text-lg font-medium md:flex md:flex-row md:items-center md:gap-5 md:text-sm lg:gap-6">
+                    {currentNavItems.map(item => (
+                        <Link
+                            key={item.href}
+                            href={item.href}
+                            className={cn("transition-colors hover:text-foreground", pathname === item.href ? "text-foreground" : "text-muted-foreground")}
+                        >
+                            {item.label}
+                        </Link>
+                    ))}
+                </nav>
+            </div>
+      
+        <div className="flex items-center gap-4 md:ml-auto md:gap-2 lg:gap-4">
+            <form className="ml-auto flex-1 sm:flex-initial">
+                <div className="relative">
+                    <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+                    <Input
+                    type="search"
+                    placeholder="Search..."
+                    className="pl-8 sm:w-[300px] md:w-[200px] lg:w-[300px]"
+                    />
+                </div>
+            </form>
+            <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+                <Button variant="outline" size="icon" className="overflow-hidden rounded-full">
+                    <Avatar>
+                        <AvatarImage src={`https://avatar.vercel.sh/${user?.email}.png`} alt={userData?.name} />
+                        <AvatarFallback>{getInitials(userData?.name)}</AvatarFallback>
+                    </Avatar>
+                </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+                <DropdownMenuLabel>{userData?.name || 'My Account'}</DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem asChild><Link href="/dashboard/settings">Settings</Link></DropdownMenuItem>
+                <DropdownMenuItem asChild><Link href="/dashboard/support">Support</Link></DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem onClick={handleLogout}>Logout</DropdownMenuItem>
+            </DropdownMenuContent>
+            </DropdownMenu>
+        </div>
       </div>
     </header>
   );
