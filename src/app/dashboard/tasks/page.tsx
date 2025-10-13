@@ -1,7 +1,7 @@
 
 "use client";
 
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
@@ -10,7 +10,7 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import { Calendar } from '@/components/ui/calendar';
-import { parseISO } from 'date-fns';
+import { parseISO, isSameDay } from 'date-fns';
 
 type TaskStatus = "Pending" | "In Progress" | "Submitted" | "Completed" | "Overdue";
 
@@ -46,6 +46,11 @@ export default function TasksPage() {
             )
         );
     };
+
+    const selectedDayTasks = useMemo(() => {
+        if (!date) return [];
+        return taskList.filter(task => isSameDay(parseISO(task.due), date));
+    }, [date, taskList]);
 
     return (
         <>
@@ -133,19 +138,45 @@ export default function TasksPage() {
                      <Card>
                         <CardHeader>
                             <CardTitle>Task Calendar</CardTitle>
-                            <CardDescription>Your tasks and deadlines on a calendar. Dates with tasks are highlighted.</CardDescription>
+                            <CardDescription>Your tasks and deadlines on a calendar. Select a date to see its tasks.</CardDescription>
                         </CardHeader>
-                        <CardContent className="flex justify-center">
-                            <Calendar
-                                mode="single"
-                                selected={date}
-                                onSelect={setDate}
-                                modifiers={{ due: taskDueDates }}
-                                modifiersClassNames={{
-                                  due: 'bg-primary/20 rounded-full',
-                                }}
-                                className="rounded-md border"
-                            />
+                        <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                             <div className="flex justify-center">
+                                <Calendar
+                                    mode="single"
+                                    selected={date}
+                                    onSelect={setDate}
+                                    modifiers={{ due: taskDueDates }}
+                                    modifiersClassNames={{
+                                    due: 'bg-primary/20 rounded-full',
+                                    }}
+                                    className="rounded-md border"
+                                />
+                            </div>
+                             <div>
+                                <h3 className="text-lg font-semibold mb-4">Tasks for {date ? date.toLocaleDateString() : 'Selected Day'}</h3>
+                                {selectedDayTasks.length > 0 ? (
+                                    <div className="space-y-4">
+                                        {selectedDayTasks.map(task => (
+                                            <div key={task.id} className="p-4 border rounded-lg bg-muted/50">
+                                                <div className="flex justify-between items-start">
+                                                    <p className="font-semibold">{task.title}</p>
+                                                    <Badge variant={task.priority === 'High' ? 'destructive' : task.priority === 'Medium' ? 'secondary' : 'outline'}>{task.priority}</Badge>
+                                                </div>
+                                                <p className="text-sm text-muted-foreground mt-1">Project: {task.project}</p>
+                                                <div className="mt-2">
+                                                    <Badge variant={getStatusBadgeVariant(task.status)}>{task.status}</Badge>
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </div>
+                                ) : (
+                                    <div className="flex flex-col items-center justify-center h-full text-center p-8 border-dashed border-2 rounded-lg">
+                                        <p className="text-muted-foreground">No tasks due on this day.</p>
+                                        <p className="text-sm text-muted-foreground mt-1">Select another date to view tasks.</p>
+                                    </div>
+                                )}
+                            </div>
                         </CardContent>
                     </Card>
                 </TabsContent>
