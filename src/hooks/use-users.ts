@@ -13,16 +13,16 @@ export function useUsers() {
   const [users, setUsers] = useState<UserData[]>([]);
   const [loading, setLoading] = useState(true);
   const db = useFirestore();
-  const { userData } = useAuth();
+  const { userData, loading: authLoading } = useAuth();
 
   useEffect(() => {
-    if (!db || !userData) {
-      setLoading(false);
+    // Wait until authentication check is complete
+    if (authLoading || !db) {
+      // Keep loading until auth status is resolved
       return;
     }
 
-    // Only admins should be able to fetch all users
-    if (userData.role !== 'admin') {
+    if (!userData || userData.role !== 'admin') {
       setUsers([]);
       setLoading(false);
       return;
@@ -51,7 +51,7 @@ export function useUsers() {
     });
 
     return () => unsubscribe();
-  }, [db, userData]);
+  }, [db, userData, authLoading]);
 
   return { users, loading };
 }
