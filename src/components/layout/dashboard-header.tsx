@@ -43,7 +43,7 @@ export default function DashboardHeader() {
   };
 
   const navItems = [
-    { href: "/dashboard", icon: Home, label: "Dashboard" },
+    { href: "/dashboard", icon: Home, label: "Home" },
     { href: "/dashboard/users", icon: Users2, label: "Users" },
     { href: "/dashboard/projects", icon: FolderKanban, label: "Projects" },
     { href: "/dashboard/performance", icon: Activity, label: "Performance" },
