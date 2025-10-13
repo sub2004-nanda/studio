@@ -12,6 +12,7 @@ export interface UserData {
   email: string;
   role: 'unassigned' | 'admin' | 'manager' | 'employee' | 'viewer';
   status: 'pending_approval' | 'approved' | 'rejected';
+  departmentId?: string;
 }
 
 export function useAuth() {
