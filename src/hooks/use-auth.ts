@@ -23,23 +23,29 @@ export function useAuth() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (user === null && auth?.app) {
+    if (!auth?.app) {
+        // Firebase not initialized yet
+        return;
+    }
+    
+    if (user === null) {
+        // User is not logged in
+        setUserData(null);
         setLoading(false);
         return;
     }
     
-    if (user) {
-      if (!db) {
-        console.error("Firestore is not initialized");
-        setLoading(false);
-        return;
-      }
+    // User is logged in, but we haven't fetched their data yet.
+    setLoading(true);
+
+    if (db) {
       const userDocRef = doc(db, 'users', user.uid);
       
       const unsubscribeFirestore = onSnapshot(userDocRef, (docSnap) => {
         if (docSnap.exists()) {
           setUserData(docSnap.data() as UserData);
         } else {
+          // User exists in Auth, but not in Firestore DB. Treat as logged out/no permissions.
           setUserData(null);
         }
         setLoading(false);
