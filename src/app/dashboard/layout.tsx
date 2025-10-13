@@ -16,13 +16,14 @@ export default function DashboardLayout({
   const router = useRouter();
   
   useEffect(() => {
-    // Only redirect if authentication is resolved and there is no user.
+    // Only redirect if authentication is fully resolved and confirms there is no user.
     if (status === 'unauthenticated') {
       router.push("/login");
     }
   }, [status, router]);
 
-  // Show a loader while authentication is in progress.
+  // Show a loader while authentication is in progress or if the user object is not yet available.
+  // This prevents a flicker/redirect during hot reloads.
   if (status === 'loading' || !user) {
     return (
       <div className="flex min-h-screen items-center justify-center">
@@ -31,7 +32,7 @@ export default function DashboardLayout({
     );
   }
   
-  // Render the dashboard once the user is authenticated and their data is resolved.
+  // Render the dashboard only once the user is confirmed to be authenticated.
   return (
       <div className="flex min-h-screen w-full flex-col">
         <DashboardHeader />
