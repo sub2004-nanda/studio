@@ -69,7 +69,7 @@ export default function AdminDashboard({ user, userData }: { user: any; userData
                         icon={FolderKanban}
                         href="/dashboard/projects"
                     />
-                    <AdminFeature-card
+                    <AdminFeatureCard
                         title="Performance Overview"
                         description="Monitor real-time productivity."
                         icon={Activity}
@@ -80,4 +80,3 @@ export default function AdminDashboard({ user, userData }: { user: any; userData
         </div>
     );
 }
-
