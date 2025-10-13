@@ -3,7 +3,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Bell, Search, FolderKanban, Activity, Users2, Building, Target, CheckSquare, BarChart, MessageSquare, File, Bot, Eye } from "lucide-react";
+import { Home, Bell, Search, FolderKanban, Activity, Users2, Building, Target, CheckSquare, BarChart, MessageSquare, File, Bot, Eye } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -20,6 +20,8 @@ import { Input } from "../ui/input";
 import Logo from '../icons/logo';
 import { cn } from '@/lib/utils';
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from '../ui/sheet';
+import { Menu } from 'lucide-react';
+import React from 'react';
 
 function getInitials(name: string | null | undefined) {
     if (!name) return 'U';
@@ -39,7 +41,7 @@ export default function DashboardHeader() {
   };
 
   const navItems = [
-    { href: "/dashboard", label: "Home", roles: ['admin', 'manager', 'employee'] },
+    { href: "/dashboard", icon: Home, label: "Home", roles: ['admin', 'manager', 'employee'] },
   ];
 
   const adminNav = [
@@ -63,9 +65,9 @@ export default function DashboardHeader() {
   ]
 
   const employeeNav = [
-    { href: "/dashboard/tasks", icon: CheckSquare, label: "Tasks & Projects", roles: ['employee'] },
-    { href: "/dashboard/goals", icon: Target, label: "KPIs & Goals", roles: ['employee'] },
-    { href: "/dashboard/performance", icon: BarChart, label: "Performance", roles: ['employee'] },
+    { href: "/dashboard/tasks", icon: CheckSquare, label: "My Tasks", roles: ['employee'] },
+    { href: "/dashboard/goals", icon: Target, label: "My Goals", roles: ['employee'] },
+    { href: "/dashboard/performance", icon: BarChart, label: "My Performance", roles: ['employee'] },
     { href: "/dashboard/documents", icon: File, label: "My Documents", roles: ['employee'] },
   ]
 
@@ -78,15 +80,55 @@ export default function DashboardHeader() {
   }
 
   const currentNavItems = getNavItems();
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = React.useState(false);
 
   return (
     <header className="sticky top-0 z-30 flex h-14 items-center gap-4 border-b bg-background px-4 sm:static sm:h-auto sm:border-0 sm:bg-transparent sm:px-6">
-       <div className="flex items-center gap-2 mr-4">
+       <div className="flex items-center gap-2 mr-auto">
+             <Sheet open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen}>
+                <SheetTrigger asChild>
+                    <Button
+                    variant="outline"
+                    size="icon"
+                    className="shrink-0 md:hidden"
+                    >
+                    <Menu className="h-5 w-5" />
+                    <span className="sr-only">Toggle navigation menu</span>
+                    </Button>
+                </SheetTrigger>
+                <SheetContent side="left">
+                    <nav className="grid gap-6 text-lg font-medium">
+                        <Link
+                            href="/dashboard"
+                            className="flex items-center gap-2 text-lg font-semibold mb-4"
+                            onClick={() => setIsMobileMenuOpen(false)}
+                        >
+                            <Logo className="h-7 w-7 text-primary" />
+                            <span className="sr-only">ProductivityPulse</span>
+                        </Link>
+                        {currentNavItems.map(item => (
+                            <Link
+                                key={item.href}
+                                href={item.href}
+                                className={cn(
+                                    "flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary",
+                                    pathname === item.href && "text-primary bg-muted"
+                                )}
+                                onClick={() => setIsMobileMenuOpen(false)}
+                            >
+                                <item.icon className="h-5 w-5" />
+                                {item.label}
+                            </Link>
+                        ))}
+                    </nav>
+                </SheetContent>
+            </Sheet>
             <Link href="/dashboard" className="flex items-center gap-2 font-semibold">
-                <Logo className="h-7 w-7 text-primary" />
-                <span className="text-lg">Productivity</span>
+                <Logo className="h-7 w-7 text-primary hidden md:block" />
+                <span className="text-lg hidden md:block">ProductivityPulse</span>
             </Link>
        </div>
+       
       <div className="relative ml-auto flex-1 md:grow-0">
         <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
         <Input
@@ -95,23 +137,8 @@ export default function DashboardHeader() {
           className="w-full rounded-lg bg-background pl-8 md:w-[200px] lg:w-[336px]"
         />
       </div>
-
-       <nav className="hidden md:flex items-center space-x-2 text-sm font-medium ml-6">
-          {currentNavItems.map((item) => (
-            <Link
-              key={item.href}
-              href={item.href}
-              className={cn(
-                "px-3 py-2 rounded-md transition-all",
-                pathname === item.href ? "bg-primary text-primary-foreground" : "hover:bg-primary/10"
-              )}
-            >
-              {item.label}
-            </Link>
-          ))}
-      </nav>
       
-      <div className="flex items-center gap-2 ml-auto">
+      <div className="flex items-center gap-2 ml-2">
         {userData?.role === 'admin' && (
              <Sheet>
                 <SheetTrigger asChild>
@@ -152,8 +179,8 @@ export default function DashboardHeader() {
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>{userData?.name || 'My Account'}</DropdownMenuLabel>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>Settings</DropdownMenuItem>
-            <DropdownMenuItem>Support</DropdownMenuItem>
+            <DropdownMenuItem asChild><Link href="/dashboard/settings">Settings</Link></DropdownMenuItem>
+            <DropdownMenuItem asChild><Link href="/dashboard/support">Support</Link></DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem onClick={handleLogout}>Logout</DropdownMenuItem>
           </DropdownMenuContent>

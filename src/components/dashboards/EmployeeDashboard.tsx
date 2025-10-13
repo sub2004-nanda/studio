@@ -4,9 +4,12 @@
 import { UserData } from "@/hooks/use-auth";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { CheckCircle, ListTodo, Percent, TrendingUp, MessageSquare, Bell } from "lucide-react";
+import { CheckCircle, ListTodo, Percent, TrendingUp, MessageSquare, Bell, ArrowRight } from "lucide-react";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import { Progress } from "@/components/ui/progress";
+import Link from "next/link";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "../ui/table";
+import { Badge } from "../ui/badge";
 
 const taskData = [
   { name: 'Mon', completed: 4 },
@@ -23,9 +26,17 @@ const kpiData = [
 ]
 
 const recentActivity = [
-    { type: "feedback", content: "Great work on the Q3 report!", author: "Jane Doe", icon: MessageSquare },
-    { type: "notification", content: "New task 'Prepare Q4 presentation' assigned.", author: "Admin", icon: Bell },
+    { type: "feedback", content: "Great work on the Q3 report! The insights were excellent.", author: "Jane Doe (Manager)", icon: MessageSquare },
+    { type: "notification", content: "New task 'Prepare Q4 presentation' has been assigned to you.", author: "System", icon: Bell },
+    { type: "feedback", content: "Submission for 'Initial project mockups' was approved.", author: "Jane Doe (Manager)", icon: CheckCircle },
 ]
+
+const ongoingTasks = [
+    { id: 1, title: "Prepare Q4 presentation", priority: "High", due: "2024-10-25" },
+    { id: 2, title: "Update client contact list", priority: "Medium", due: "2024-10-22" },
+    { id: 3, title: "Fix login page bug", priority: "High", due: "2024-10-20" },
+];
+
 
 const StatCard = ({ title, value, icon: Icon, change }: { title: string, value: string | number, icon: React.ElementType, change?: string }) => {
     return (
@@ -52,9 +63,9 @@ export default function EmployeeDashboard({ user, userData }: { user: any; userD
             </div>
             
             <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3 mb-8">
-                <StatCard title="Tasks Completed" value="30" icon={CheckCircle} change="+5 from last week" />
+                <StatCard title="Tasks Completed (This Month)" value="30" icon={CheckCircle} change="+5 from last week" />
                 <StatCard title="Pending Tasks" value="8" icon={ListTodo} />
-                <StatCard title="Overall Performance" value="91%" icon={TrendingUp} change="+2% from last month" />
+                <StatCard title="Overall Performance Score" value="91%" icon={TrendingUp} change="+2% from last month" />
             </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-5 gap-8">
@@ -70,7 +81,7 @@ export default function EmployeeDashboard({ user, userData }: { user: any; userD
                                 <XAxis dataKey="name" />
                                 <YAxis />
                                 <Tooltip />
-                                <Bar dataKey="completed" fill="hsl(var(--primary))" />
+                                <Bar dataKey="completed" fill="hsl(var(--primary))" name="Tasks Completed" />
                             </BarChart>
                         </ResponsiveContainer>
                     </CardContent>
@@ -78,7 +89,7 @@ export default function EmployeeDashboard({ user, userData }: { user: any; userD
 
                 <Card className="lg:col-span-2">
                     <CardHeader>
-                        <CardTitle>KPI Progress</CardTitle>
+                        <CardTitle>My KPI Progress</CardTitle>
                         <CardDescription>Your progress towards key performance indicators.</CardDescription>
                     </CardHeader>
                     <CardContent className="space-y-4">
@@ -86,18 +97,53 @@ export default function EmployeeDashboard({ user, userData }: { user: any; userD
                             <div key={kpi.name}>
                                 <div className="flex justify-between items-center mb-1">
                                     <p className="text-sm font-medium">{kpi.name}</p>
-                                    <p className={`text-sm font-bold ${kpi.value >= kpi.target ? 'text-green-600' : 'text-yellow-600'}`}>{kpi.value}%</p>
+                                    <p className={`text-sm font-bold ${kpi.value >= kpi.target ? 'text-green-600' : 'text-yellow-600'}`}>{kpi.value}% / {kpi.target}%</p>
                                 </div>
                                 <Progress value={kpi.value} />
                             </div>
                         ))}
-                         <Button variant="outline" className="w-full mt-4">View All KPIs</Button>
+                         <Button variant="outline" className="w-full mt-4" asChild>
+                            <Link href="/dashboard/goals">View All KPIs & Goals <ArrowRight className="ml-2 h-4 w-4" /></Link>
+                        </Button>
                     </CardContent>
                 </Card>
                 
-                <Card className="lg:col-span-5">
+                <Card className="lg:col-span-3">
+                    <CardHeader>
+                        <CardTitle>My Ongoing Tasks</CardTitle>
+                        <CardDescription>A quick look at your high-priority and upcoming tasks.</CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                       <Table>
+                            <TableHeader>
+                                <TableRow>
+                                    <TableHead>Task</TableHead>
+                                    <TableHead>Priority</TableHead>
+                                    <TableHead>Due Date</TableHead>
+                                </TableRow>
+                            </TableHeader>
+                            <TableBody>
+                                {ongoingTasks.map(task => (
+                                <TableRow key={task.id}>
+                                    <TableCell className="font-medium">{task.title}</TableCell>
+                                    <TableCell>
+                                        <Badge variant={task.priority === 'High' ? 'destructive' : 'secondary'}>{task.priority}</Badge>
+                                    </TableCell>
+                                    <TableCell>{task.due}</TableCell>
+                                </TableRow>
+                                ))}
+                            </TableBody>
+                        </Table>
+                         <Button variant="default" className="w-full mt-4" asChild>
+                            <Link href="/dashboard/tasks">Manage All Tasks <ArrowRight className="ml-2 h-4 w-4" /></Link>
+                        </Button>
+                    </CardContent>
+                </Card>
+
+                <Card className="lg:col-span-2">
                     <CardHeader>
                         <CardTitle>Recent Activity & Feedback</CardTitle>
+                        <CardDescription>Notifications and manager feedback.</CardDescription>
                     </CardHeader>
                     <CardContent>
                         <ul className="space-y-4">
@@ -107,8 +153,8 @@ export default function EmployeeDashboard({ user, userData }: { user: any; userD
                                         <activity.icon className="h-5 w-5 text-muted-foreground" />
                                     </div>
                                     <div>
-                                        <p className="font-medium">{activity.content}</p>
-                                        <p className="text-sm text-muted-foreground">from {activity.author}</p>
+                                        <p className="font-medium text-sm leading-snug">{activity.content}</p>
+                                        <p className="text-xs text-muted-foreground">from {activity.author}</p>
                                     </div>
                                 </li>
                             ))}
