@@ -4,7 +4,7 @@
 import { UserData } from "@/hooks/use-auth";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Users, Target, CheckSquare, BarChart as BarChartIcon, Bell, ArrowRight, TrendingUp, Users2, Activity, Lightbulb, Bot, Trophy } from "lucide-react";
+import { Users, Target, CheckSquare, BarChart as BarChartIcon, Bell, ArrowRight, TrendingUp, Users2, Activity, Lightbulb, Bot, Trophy, Mic, Eye } from "lucide-react";
 import Link from "next/link";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, LineChart, Line } from 'recharts';
 import ProductivityHeatmap from "./ProductivityHeatmap";
@@ -129,7 +129,7 @@ export default function ManagerDashboard({ user, userData }: { user: any; userDa
                 </Card>
             </div>
             
-            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
                 <FeatureCard
                     title="Team"
                     description="View and manage your department's employees."
@@ -165,6 +165,30 @@ export default function ManagerDashboard({ user, userData }: { user: any; userDa
                     description="Boost motivation with gamified goals and KPIs."
                     icon={Trophy}
                     href="/dashboard/goals"
+                />
+                <FeatureCard
+                    title="Growth & Skills"
+                    description="Track employee growth and identify skill gaps."
+                    icon={TrendingUp}
+                    href="/dashboard/team"
+                />
+                 <FeatureCard
+                    title="Collaboration Wall"
+                    description="A social feed for department updates and achievements."
+                    icon={Users2}
+                    href="/dashboard/communication"
+                />
+                 <FeatureCard
+                    title="Voice Commands"
+                    description="Manage tasks with hands-free voice commands."
+                    icon={Mic}
+                    href="/dashboard/tasks"
+                />
+                 <FeatureCard
+                    title="Data Privacy"
+                    description="Review data access logs and transparency reports."
+                    icon={Eye}
+                    href="/dashboard/privacy"
                 />
             </div>
         </>
