@@ -7,6 +7,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Users, FolderKanban, Activity, ArrowRight, Building, UserCheck, Target } from "lucide-react";
 import Link from "next/link";
 import { useUsers } from "@/hooks/use-users";
+import { useMemo } from "react";
 
 const AdminFeatureCard = ({ title, description, icon: Icon, href }: { title: string, description: string, icon: React.ElementType, href: string }) => {
     return (
@@ -48,8 +49,11 @@ const StatCard = ({ title, value, icon: Icon }: { title: string, value: string |
 export default function AdminDashboard({ user, userData }: { user: any; userData: UserData | null; }) {
     const { users, loading } = useUsers();
     
-    // This is a placeholder. In a real app, departments would likely be their own collection.
-    const departmentCount = loading ? '...' : new Set(users.map(u => u.departmentId).filter(Boolean)).size;
+    const departmentCount = useMemo(() => {
+        if (loading || !users) return '...';
+        const departmentIds = users.map(u => u.departmentId).filter(Boolean);
+        return new Set(departmentIds).size;
+    }, [users, loading]);
 
     return (
         <>
