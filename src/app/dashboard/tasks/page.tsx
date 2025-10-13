@@ -21,6 +21,10 @@ const tasks = [
     { id: 4, title: "Design new ad creatives", project: "Marketing Campaign", priority: "Medium", due: "2024-10-18", status: "Completed" as TaskStatus },
     { id: 5, title: "Draft monthly newsletter", project: "Content Creation", priority: "Low", due: "2024-10-15", status: "Overdue" as TaskStatus },
     { id: 6, title: "Review pull request #123", project: "Website Revamp", priority: "High", due: "2024-10-21", status: "In Progress" as TaskStatus },
+    { id: 7, title: "Plan team offsite event", project: "HR", priority: "Medium", due: "2024-11-05", status: "Pending" as TaskStatus },
+    { id: 8, title: "Update documentation for API v2", project: "Website Revamp", priority: "High", due: "2024-11-15", status: "In Progress" as TaskStatus },
+    { id: 9, title: "Submit expense report for October", project: "Admin", priority: "Low", due: "2024-11-01", status: "Completed" as TaskStatus },
+    { id: 10, title: "Finalize 2025 budget proposal", project: "Finance", priority: "High", due: "2024-12-10", status: "Pending" as TaskStatus },
 ];
 
 const getStatusBadgeVariant = (status: TaskStatus) => {
