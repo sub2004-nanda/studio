@@ -11,7 +11,13 @@ import {
   Target,
   CheckSquare,
   BarChart,
-  Building
+  Building,
+  Menu,
+  Search,
+  MessageSquare,
+  File,
+  LifeBuoy,
+  Cog
 } from "lucide-react";
 import {
   DropdownMenu,
@@ -26,7 +32,8 @@ import { useAuth as useFirebaseAuth } from "@/firebase/provider";
 import Logo from "../icons/logo";
 import { useAuth } from "@/hooks/use-auth";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
-import { usePathname } from "next/navigation";
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { Input } from "../ui/input";
 
 function getInitials(name: string | null | undefined) {
     if (!name) return 'U';
@@ -37,7 +44,6 @@ function getInitials(name: string | null | undefined) {
 export default function DashboardHeader() {
   const auth = useFirebaseAuth();
   const { user, userData } = useAuth();
-  const pathname = usePathname();
 
   const handleLogout = () => {
     if (auth) {
@@ -46,7 +52,7 @@ export default function DashboardHeader() {
   };
 
   const navItems = [
-    { href: "/dashboard", icon: Home, label: "Home", roles: ['admin', 'manager', 'employee'] },
+    { href: "/dashboard", icon: Home, label: "Dashboard", roles: ['admin', 'manager', 'employee'] },
   ];
 
   const adminNav = [
@@ -58,51 +64,85 @@ export default function DashboardHeader() {
 
   const managerNav = [
     { href: "/dashboard/team", icon: Users2, label: "Team", roles: ['manager'] },
-    { href: "/dashboard/goals", icon: Target, label: "Goals", roles: ['manager'] },
+    { href: "/dashboard/goals", icon: Target, label: "Goals & KPIs", roles: ['manager'] },
     { href: "/dashboard/tasks", icon: CheckSquare, label: "Tasks", roles: ['manager'] },
     { href: "/dashboard/reports", icon: BarChart, label: "Reports", roles: ['manager'] },
-    { href: "/dashboard/communication", icon: Bell, label: "Messages", roles: ['manager'] },
+    { href: "/dashboard/communication", icon: MessageSquare, label: "Messages", roles: ['manager'] },
   ]
 
-  const getNav = () => {
-    switch (userData?.role) {
+  const employeeNav = [
+    { href: "/dashboard/tasks", icon: CheckSquare, label: "Tasks & Projects", roles: ['employee'] },
+    { href: "/dashboard/goals", icon: Target, label: "KPIs & Goals", roles: ['employee'] },
+    { href: "/dashboard/performance", icon: BarChart, label: "Performance", roles: ['employee'] },
+    { href: "/dashboard/communication", icon: MessageSquare, label: "Messages", roles: ['employee'] },
+    { href: "/dashboard/documents", icon: File, label: "My Documents", roles: ['employee'] },
+  ]
+  
+  const bottomNav = [
+    { href: "/dashboard/settings", icon: Cog, label: "Settings", roles: ['admin', 'manager', 'employee'] },
+    { href: "/dashboard/support", icon: LifeBuoy, label: "Help & Support", roles: ['admin', 'manager', 'employee'] },
+  ]
+
+  const getNav = (role: UserData['role']) => {
+    switch (role) {
       case 'admin':
-        return [...navItems, ...adminNav];
+        return { top: [...navItems, ...adminNav], bottom: bottomNav };
       case 'manager':
-        return [...navItems, ...managerNav];
+        return { top: [...navItems, ...managerNav], bottom: bottomNav };
+      case 'employee':
       default:
-        return navItems;
+        return { top: [...navItems, ...employeeNav], bottom: bottomNav };
     }
   }
+  
+  const { top: topNav, bottom: bottomNavItems } = getNav(userData?.role || 'employee');
 
   return (
-    <header className="sticky top-0 z-40 flex h-16 items-center gap-4 border-b bg-background px-4 md:px-6">
-       <Link
-          href="/dashboard"
-          className="flex items-center gap-2 text-lg font-semibold md:text-base"
-        >
-          <Logo className="h-6 w-6 text-primary" />
-          <span className="sr-only">ProductivityPulse</span>
-        </Link>
-      <nav className="hidden flex-1 flex-col gap-6 text-lg font-medium md:flex md:flex-row md:items-center md:justify-center md:gap-5 md:text-sm lg:gap-6">
-        {getNav().map((item) => (
-            <Link
-                key={item.href}
-                href={item.href}
-                className={`transition-colors hover:text-foreground ${pathname === item.href ? 'text-foreground' : 'text-muted-foreground'}`}
-            >
-                {item.label}
-            </Link>
-        ))}
-      </nav>
-      <div className="flex items-center gap-4 md:gap-2 lg:gap-4">
-        <Button variant="ghost" size="icon" className="rounded-full">
+    <header className="sticky top-0 z-30 flex h-14 items-center gap-4 border-b bg-background px-4 sm:static sm:h-auto sm:border-0 sm:bg-transparent sm:px-6">
+       <Sheet>
+            <SheetTrigger asChild>
+              <Button size="icon" variant="outline" className="sm:hidden">
+                <Menu className="h-5 w-5" />
+                <span className="sr-only">Toggle Menu</span>
+              </Button>
+            </SheetTrigger>
+            <SheetContent side="left" className="sm:max-w-xs">
+              <nav className="grid gap-6 text-lg font-medium">
+                <Link
+                  href="#"
+                  className="group flex h-10 w-10 shrink-0 items-center justify-center gap-2 rounded-full bg-primary text-lg font-semibold text-primary-foreground md:text-base"
+                >
+                  <Logo className="h-5 w-5 transition-all group-hover:scale-110" />
+                  <span className="sr-only">ProductivityPulse</span>
+                </Link>
+                {topNav.map(item => (
+                  <Link
+                      key={item.href}
+                      href={item.href}
+                      className="flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground"
+                    >
+                      <item.icon className="h-5 w-5" />
+                      {item.label}
+                    </Link>
+                ))}
+              </nav>
+            </SheetContent>
+          </Sheet>
+      <div className="relative ml-auto flex-1 md:grow-0">
+        <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+        <Input
+          type="search"
+          placeholder="Search..."
+          className="w-full rounded-lg bg-background pl-8 md:w-[200px] lg:w-[336px]"
+        />
+      </div>
+      <Button variant="ghost" size="icon" className="rounded-full">
             <Bell className="h-5 w-5" />
             <span className="sr-only">Toggle notifications</span>
         </Button>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="secondary" size="icon" className="rounded-full">
+            <Button variant="outline" size="icon" className="overflow-hidden rounded-full">
                 <Avatar>
                     <AvatarImage src={`https://avatar.vercel.sh/${user?.email}.png`} alt={userData?.name} />
                     <AvatarFallback>{getInitials(userData?.name)}</AvatarFallback>
@@ -118,7 +158,6 @@ export default function DashboardHeader() {
             <DropdownMenuItem onClick={handleLogout}>Logout</DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
-      </div>
     </header>
   );
 }
