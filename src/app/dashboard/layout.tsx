@@ -5,7 +5,7 @@ import { useAuth } from "@/hooks/use-auth";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { Loader2 } from "lucide-react";
-import DashboardSidebar from "@/components/layout/dashboard-sidebar";
+import DashboardHeader from "@/components/layout/dashboard-header";
 
 export default function DashboardLayout({
   children,
@@ -34,13 +34,11 @@ export default function DashboardLayout({
   }
 
   return (
-    <div className="flex min-h-screen w-full bg-muted/40">
-        <DashboardSidebar />
-        <div className="flex flex-col sm:gap-4 sm:py-4 sm:pl-14 flex-grow">
-            <main className="grid flex-1 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8">
-                {children}
-            </main>
-      </div>
+    <div className="flex min-h-screen w-full flex-col">
+        <DashboardHeader />
+        <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-8">
+            {children}
+        </main>
     </div>
   );
 }
