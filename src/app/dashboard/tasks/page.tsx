@@ -5,10 +5,12 @@ import { useState } from 'react';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
-import { MoreVertical, CheckCircle, Clock, Lightbulb, Calendar, List } from "lucide-react";
+import { MoreVertical, CheckCircle, Clock, Lightbulb, Calendar as CalendarIcon, List } from "lucide-react";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
+import { Calendar } from '@/components/ui/calendar';
+import { parseISO } from 'date-fns';
 
 type TaskStatus = "Pending" | "In Progress" | "Submitted" | "Completed" | "Overdue";
 
@@ -33,6 +35,9 @@ const getStatusBadgeVariant = (status: TaskStatus) => {
 
 export default function TasksPage() {
     const [taskList, setTaskList] = useState(tasks);
+    const [date, setDate] = useState<Date | undefined>(new Date());
+    
+    const taskDueDates = taskList.map(task => parseISO(task.due));
 
     const handleStatusChange = (taskId: number, newStatus: TaskStatus) => {
         setTaskList(currentTasks => 
@@ -66,7 +71,7 @@ export default function TasksPage() {
                      </div>
                     <TabsList>
                         <TabsTrigger value="list"><List className="mr-2 h-4 w-4" />List View</TabsTrigger>
-                        <TabsTrigger value="calendar"><Calendar className="mr-2 h-4 w-4" />Calendar View</TabsTrigger>
+                        <TabsTrigger value="calendar"><CalendarIcon className="mr-2 h-4 w-4" />Calendar View</TabsTrigger>
                     </TabsList>
                 </div>
                
@@ -128,12 +133,19 @@ export default function TasksPage() {
                      <Card>
                         <CardHeader>
                             <CardTitle>Task Calendar</CardTitle>
-                            <CardDescription>Your tasks and deadlines on a calendar.</CardDescription>
+                            <CardDescription>Your tasks and deadlines on a calendar. Dates with tasks are highlighted.</CardDescription>
                         </CardHeader>
-                        <CardContent>
-                            <div className="h-[400px] flex items-center justify-center bg-muted/50 rounded-lg">
-                                <p className="text-muted-foreground">Interactive calendar component would be rendered here.</p>
-                            </div>
+                        <CardContent className="flex justify-center">
+                            <Calendar
+                                mode="single"
+                                selected={date}
+                                onSelect={setDate}
+                                modifiers={{ due: taskDueDates }}
+                                modifiersClassNames={{
+                                  due: 'bg-primary/20 rounded-full',
+                                }}
+                                className="rounded-md border"
+                            />
                         </CardContent>
                     </Card>
                 </TabsContent>
