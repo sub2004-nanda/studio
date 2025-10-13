@@ -22,6 +22,10 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { useToast } from '@/hooks/use-toast';
 import { Loader2 } from 'lucide-react';
 import { useUsers } from '@/hooks/use-users';
+import { useFirestore } from '@/firebase/provider';
+import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
+import { errorEmitter } from '@/firebase/error-emitter';
+import { FirestorePermissionError, type SecurityRuleContext } from '@/firebase/errors';
 
 const formSchema = z.object({
   name: z.string().min(2, { message: 'Department name must be at least 2 characters.' }),
@@ -33,6 +37,7 @@ export function AddDepartmentDialog({ children }: { children: React.ReactNode })
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
   const { users } = useUsers();
+  const db = useFirestore();
   const managers = users.filter(u => u.role === 'manager');
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -45,18 +50,45 @@ export function AddDepartmentDialog({ children }: { children: React.ReactNode })
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setIsLoading(true);
-    // Placeholder for Firestore logic
-    console.log('Creating department:', values);
-    
-    setTimeout(() => {
-        toast({
-            title: 'Department Created',
-            description: `${values.name} has been added.`,
-        });
+    if (!db) {
+        toast({ title: "Error", description: "Database not available.", variant: "destructive" });
         setIsLoading(false);
-        form.reset();
-        setIsOpen(false);
-    }, 1000)
+        return;
+    }
+
+    const departmentData = {
+      name: values.name,
+      managerUid: values.managerUid || null,
+      createdAt: serverTimestamp(),
+    };
+
+    const departmentsCollectionRef = collection(db, 'departments');
+
+    addDoc(departmentsCollectionRef, departmentData)
+        .then(() => {
+            toast({
+                title: 'Department Created',
+                description: `${values.name} has been added.`,
+            });
+            form.reset();
+            setIsOpen(false);
+        })
+        .catch(async (serverError) => {
+            const permissionError = new FirestorePermissionError({
+                path: departmentsCollectionRef.path,
+                operation: 'create',
+                requestResourceData: departmentData,
+            } satisfies SecurityRuleContext);
+            errorEmitter.emit('permission-error', permissionError);
+            toast({
+                title: "Permission Denied",
+                description: "You don't have permission to create departments.",
+                variant: "destructive",
+            });
+        })
+        .finally(() => {
+            setIsLoading(false);
+        });
   }
 
   return (

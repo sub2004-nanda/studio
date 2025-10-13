@@ -3,16 +3,12 @@
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Building, UserPlus, MoreVertical, BarChart2, FolderKanban, Users, Users2 } from "lucide-react";
+import { Building, UserPlus, MoreVertical, BarChart2, FolderKanban, Users2, Loader2 } from "lucide-react";
 import { AddDepartmentDialog } from "./add-department-dialog";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "../ui/dropdown-menu";
-
-const departments = [
-    { id: '1', name: 'Engineering', head: 'Alice Johnson', avgProductivity: '92%', projects: 5, employees: 12 },
-    { id: '2', name: 'Marketing', head: 'Bob Williams', avgProductivity: '88%', projects: 3, employees: 8 },
-    { id: '3', name: 'Sales', head: 'Charlie Brown', avgProductivity: '78%', projects: 8, employees: 15 },
-    { id: '4', name: 'Support', head: 'Diana Miller', avgProductivity: '95%', projects: 2, employees: 10 },
-];
+import { useDepartments } from "@/hooks/use-departments";
+import { useUsers } from "@/hooks/use-users";
+import { useMemo } from "react";
 
 const DepartmentStat = ({ icon: Icon, label, value }: { icon: React.ElementType, label: string, value: string | number }) => (
     <div className="flex items-center gap-2 text-sm text-muted-foreground">
@@ -22,6 +18,26 @@ const DepartmentStat = ({ icon: Icon, label, value }: { icon: React.ElementType,
 )
 
 export default function DepartmentManagement() {
+    const { departments, loading: departmentsLoading } = useDepartments();
+    const { users, loading: usersLoading } = useUsers();
+
+    const departmentsWithDetails = useMemo(() => {
+        return departments.map(dept => {
+            const manager = users.find(u => u.uid === dept.managerUid);
+            const employeeCount = users.filter(u => u.departmentId === dept.id).length;
+            return {
+                ...dept,
+                head: manager?.name || 'Unassigned',
+                employees: employeeCount,
+                // These are placeholders for now
+                avgProductivity: 'N/A', 
+                projects: 0
+            }
+        })
+    }, [departments, users]);
+
+    const loading = departmentsLoading || usersLoading;
+
     return (
         <>
             <div className="flex items-center justify-between mb-8">
@@ -38,7 +54,12 @@ export default function DepartmentManagement() {
             </div>
 
             <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
-                {departments.map(dept => (
+                {loading && (
+                    <Card className="flex items-center justify-center col-span-full h-64">
+                        <Loader2 className="h-8 w-8 animate-spin text-primary" />
+                    </Card>
+                )}
+                {!loading && departmentsWithDetails.map(dept => (
                     <Card key={dept.id}>
                         <CardHeader className="flex flex-row items-start justify-between space-y-0 pb-4">
                             <div>
@@ -70,7 +91,7 @@ export default function DepartmentManagement() {
                         </CardContent>
                     </Card>
                 ))}
-                 <Card className="border-dashed flex flex-col items-center justify-center gap-4">
+                 <Card className="border-dashed flex flex-col items-center justify-center gap-4 min-h-[260px]">
                     <div className="text-center">
                         <h3 className="text-lg font-medium">Create a New Department</h3>
                         <p className="text-sm text-muted-foreground">Organize your teams and projects.</p>
