@@ -3,7 +3,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Bell, Search, FolderKanban, Activity, Users2, Building, Target, CheckSquare, BarChart, MessageSquare, File, Bot } from "lucide-react";
+import { Bell, Search, FolderKanban, Activity, Users2, Building, Target, CheckSquare, BarChart, MessageSquare, File, Bot, Eye } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -50,6 +50,8 @@ export default function DashboardHeader() {
      { href: "/dashboard/performance", icon: Activity, label: "Performance", roles: ['admin'] },
      { href: "/dashboard/kpi", icon: Target, label: "KPIs", roles: ['admin'] },
      { href: "/dashboard/reports", icon: BarChart, label: "Reports", roles: ['admin'] },
+     { href: "/dashboard/communication", icon: Bell, label: "Alerts", roles: ['admin'] },
+     { href: "/dashboard/privacy", icon: Eye, label: "Privacy", roles: ['admin'] },
   ]
 
   const managerNav = [
