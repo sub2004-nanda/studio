@@ -4,9 +4,23 @@
 import { UserData } from "@/hooks/use-auth";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Users, Target, CheckSquare, BarChart, Bell, ArrowRight } from "lucide-react";
+import { Users, Target, CheckSquare, BarChart as BarChartIcon, Bell, ArrowRight, TrendingUp, Users2, Activity } from "lucide-react";
 import Link from "next/link";
-import { useUsers } from "@/hooks/use-users";
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, LineChart, Line } from 'recharts';
+
+const teamData = [
+  { name: 'You', performance: 91 },
+  { name: 'Team Avg.', performance: 85 },
+  { name: 'Company Avg.', performance: 82 },
+];
+
+const taskData = [
+  { date: 'Mon', completed: 12 },
+  { date: 'Tue', completed: 15 },
+  { date: 'Wed', completed: 10 },
+  { date: 'Thu', completed: 18 },
+  { date: 'Fri', completed: 20 },
+];
 
 const FeatureCard = ({ title, description, icon: Icon, href }: { title: string, description: string, icon: React.ElementType, href: string }) => {
     return (
@@ -31,6 +45,22 @@ const FeatureCard = ({ title, description, icon: Icon, href }: { title: string, 
     )
 }
 
+const StatCard = ({ title, value, icon: Icon, change }: { title: string, value: string | number, icon: React.ElementType, change?: string }) => {
+    return (
+        <Card>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <CardTitle className="text-sm font-medium">{title}</CardTitle>
+                <Icon className="h-4 w-4 text-muted-foreground" />
+            </CardHeader>
+            <CardContent>
+                <div className="text-2xl font-bold">{value}</div>
+                {change && <p className="text-xs text-muted-foreground">{change}</p>}
+            </CardContent>
+        </Card>
+    );
+};
+
+
 export default function ManagerDashboard({ user, userData }: { user: any; userData: UserData | null; }) {
     
     return (
@@ -38,6 +68,50 @@ export default function ManagerDashboard({ user, userData }: { user: any; userDa
             <div className="mb-8">
                 <h1 className="text-3xl font-bold">Manager Dashboard</h1>
                 <p className="text-muted-foreground">Welcome back, {userData?.name}. Here's your department overview.</p>
+            </div>
+
+            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4 mb-8">
+                <StatCard title="Team Productivity" value="88%" icon={TrendingUp} change="+3% this week" />
+                <StatCard title="Team Members" value="12" icon={Users2} />
+                <StatCard title="Pending Reviews" value="4" icon={Activity} />
+                <StatCard title="Completed Tasks" value="45" icon={CheckSquare} change="+10 from last week" />
+            </div>
+
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+                 <Card>
+                    <CardHeader>
+                        <CardTitle>Team Performance vs. Averages</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                        <ResponsiveContainer width="100%" height={300}>
+                            <BarChart data={teamData}>
+                                <CartesianGrid strokeDasharray="3 3" />
+                                <XAxis dataKey="name" />
+                                <YAxis />
+                                <Tooltip />
+                                <Legend />
+                                <Bar dataKey="performance" fill="hsl(var(--primary))" />
+                            </BarChart>
+                        </ResponsiveContainer>
+                    </CardContent>
+                </Card>
+                 <Card>
+                    <CardHeader>
+                        <CardTitle>Weekly Task Completion</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                        <ResponsiveContainer width="100%" height={300}>
+                            <LineChart data={taskData}>
+                                <CartesianGrid strokeDasharray="3 3" />
+                                <XAxis dataKey="date" />
+                                <YAxis />
+                                <Tooltip />
+                                <Legend />
+                                <Line type="monotone" dataKey="completed" stroke="hsl(var(--primary))" activeDot={{ r: 8 }}/>
+                            </LineChart>
+                        </ResponsiveContainer>
+                    </CardContent>
+                </Card>
             </div>
             
             <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
@@ -62,7 +136,7 @@ export default function ManagerDashboard({ user, userData }: { user: any; userDa
                 <FeatureCard
                     title="Reports"
                     description="Generate and view performance reports."
-                    icon={BarChart}
+                    icon={BarChartIcon}
                     href="/dashboard/reports"
                 />
                  <FeatureCard
