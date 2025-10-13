@@ -80,6 +80,12 @@ export default function AdminDashboard({ user, userData }: { user: any; userData
                     icon={FolderKanban}
                     href="/dashboard/projects"
                 />
+                 <AdminFeatureCard
+                    title="Goal Management"
+                    description="Set and assign goals for the organization."
+                    icon={Target}
+                    href="/dashboard/goals"
+                />
                 <AdminFeatureCard
                     title="Performance"
                     description="Monitor real-time productivity."

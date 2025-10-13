@@ -45,6 +45,7 @@ export default function DashboardHeader() {
      { href: "/dashboard/users", icon: Users2, label: "Users", roles: ['admin'] },
      { href: "/dashboard/departments", icon: Building, label: "Departments", roles: ['admin']},
      { href: "/dashboard/projects", icon: FolderKanban, label: "Projects", roles: ['admin'] },
+     { href: "/dashboard/goals", icon: Target, label: "Goals", roles: ['admin'] },
      { href: "/dashboard/performance", icon: Activity, label: "Performance", roles: ['admin'] },
      { href: "/dashboard/kpi", icon: Target, label: "KPIs", roles: ['admin'] },
   ]
