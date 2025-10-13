@@ -27,7 +27,7 @@ import {
 } from "@/components/ui/select"
 import { Input } from '@/components/ui/input';
 import { useToast } from '@/hooks/use-toast';
-import { auth, db } from '@/lib/firebase';
+import { useAuth, useFirestore } from '@/firebase/provider';
 import { Loader2 } from 'lucide-react';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 
@@ -43,6 +43,8 @@ export default function SignupForm() {
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
   const { toast } = useToast();
+  const auth = useAuth();
+  const db = useFirestore();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -57,6 +59,12 @@ export default function SignupForm() {
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setIsLoading(true);
     setError(null);
+    
+    if (!auth || !db) {
+        setError("Firebase services are not available. Please try again later.");
+        setIsLoading(false);
+        return;
+    }
 
     try {
       const userCredential = await createUserWithEmailAndPassword(auth, values.email, values.password);

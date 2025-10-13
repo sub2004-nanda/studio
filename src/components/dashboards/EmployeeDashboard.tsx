@@ -3,12 +3,20 @@
 
 import { UserData } from "@/hooks/use-auth";
 import { Button } from "@/components/ui/button";
-import { auth } from "@/lib/firebase";
+import { useAuth } from "@/firebase/provider";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { User } from "lucide-react";
 
 export default function EmployeeDashboard({ user, userData }: { user: any; userData: UserData | null }) {
+    const auth = useAuth();
+
+    const handleLogout = () => {
+        if (auth) {
+            auth.signOut();
+        }
+    }
+    
     return (
         <div className="flex min-h-screen flex-col items-center justify-center bg-background p-4 text-center">
             <Card className="w-full max-w-2xl">
@@ -31,7 +39,7 @@ export default function EmployeeDashboard({ user, userData }: { user: any; userD
                         </Badge>
                     </div>
 
-                    <Button onClick={() => auth.signOut()}>Logout</Button>
+                    <Button onClick={handleLogout}>Logout</Button>
                 </CardContent>
             </Card>
         </div>

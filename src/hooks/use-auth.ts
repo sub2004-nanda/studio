@@ -2,9 +2,9 @@
 "use client";
 
 import { useState, useEffect } from 'react';
-import { onAuthStateChanged, User } from 'firebase/auth';
+import { User } from 'firebase/auth';
 import { doc, onSnapshot } from 'firebase/firestore';
-import { auth, db } from '@/lib/firebase';
+import { useAuth as useFirebaseAuth, useUser, useFirestore } from '@/firebase/provider';
 
 export interface UserData {
   uid: string;
@@ -15,26 +15,24 @@ export interface UserData {
 }
 
 export function useAuth() {
-  const [user, setUser] = useState<User | null>(null);
+  const auth = useFirebaseAuth();
+  const user = useUser();
+  const db = useFirestore();
   const [userData, setUserData] = useState<UserData | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const unsubscribeAuth = onAuthStateChanged(auth, (authUser) => {
-      if (authUser) {
-        setUser(authUser);
-      } else {
-        setUser(null);
-        setUserData(null);
+    if (user === null && auth?.app) {
         setLoading(false);
-      }
-    });
-
-    return () => unsubscribeAuth();
-  }, []);
-
-  useEffect(() => {
+        return;
+    }
+    
     if (user) {
+      if (!db) {
+        console.error("Firestore is not initialized");
+        setLoading(false);
+        return;
+      }
       const userDocRef = doc(db, 'users', user.uid);
       
       const unsubscribeFirestore = onSnapshot(userDocRef, (docSnap) => {
@@ -52,7 +50,7 @@ export function useAuth() {
 
       return () => unsubscribeFirestore();
     }
-  }, [user]);
+  }, [user, auth, db]);
 
   return { user, userData, loading };
 }

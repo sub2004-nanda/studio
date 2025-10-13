@@ -1,7 +1,10 @@
+
 import type {Metadata} from 'next';
 import './globals.css';
 import { Toaster } from "@/components/ui/toaster";
 import { Inter, Poppins } from 'next/font/google';
+import { FirebaseProvider } from '@/firebase/provider';
+import FirebaseErrorListener from '@/components/FirebaseErrorListener';
 
 const inter = Inter({
   subsets: ['latin'],
@@ -29,8 +32,11 @@ export default function RootLayout({
   return (
     <html lang="en" className={`!scroll-smooth ${inter.variable} ${poppins.variable}`}>
       <body className="font-body antialiased">
-        {children}
-        <Toaster />
+        <FirebaseProvider>
+          {children}
+          <Toaster />
+          <FirebaseErrorListener />
+        </FirebaseProvider>
       </body>
     </html>
   );

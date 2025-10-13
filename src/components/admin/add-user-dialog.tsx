@@ -23,7 +23,9 @@ import { useToast } from '@/hooks/use-toast';
 import { Loader2 } from 'lucide-react';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { doc, setDoc } from 'firebase/firestore';
-import { auth, db } from '@/lib/firebase';
+import { useFirestore, useAuth } from '@/firebase/provider';
+import { errorEmitter } from '@/firebase/error-emitter';
+import { FirestorePermissionError, type SecurityRuleContext } from '@/firebase/errors';
 
 const formSchema = z.object({
   name: z.string().min(2, { message: 'Name must be at least 2 characters.' }),
@@ -36,6 +38,8 @@ export function AddUserDialog({ children }: { children: React.ReactNode }) {
   const [isOpen, setIsOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
+  const db = useFirestore();
+  const auth = useAuth();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -49,25 +53,56 @@ export function AddUserDialog({ children }: { children: React.ReactNode }) {
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setIsLoading(true);
-    try {
-      // Note: This creates a temporary auth instance to create user without logging out the admin.
-      // In a real app, this should be a Cloud Function for security.
-      const { user } = await createUserWithEmailAndPassword(auth, values.email, values.password);
+    if (!auth || !db) {
+        toast({
+            title: "Error",
+            description: "Firebase is not initialized.",
+            variant: "destructive"
+        });
+        setIsLoading(false);
+        return;
+    }
 
-      await setDoc(doc(db, 'users', user.uid), {
+    try {
+      const { user } = await createUserWithEmailAndPassword(auth, values.email, values.password);
+      
+      const userData = {
         uid: user.uid,
         name: values.name,
         email: values.email,
         role: values.role,
-        status: 'approved',
-      });
+        status: 'approved' as const,
+      };
 
-      toast({
-        title: 'User Created',
-        description: `${values.name} has been added to the system.`,
-      });
-      form.reset();
-      setIsOpen(false);
+      const userDocRef = doc(db, 'users', user.uid);
+
+      setDoc(userDocRef, userData)
+        .then(() => {
+            toast({
+                title: 'User Created',
+                description: `${values.name} has been added to the system.`,
+            });
+            form.reset();
+            setIsOpen(false);
+        })
+        .catch(async (serverError) => {
+            const permissionError = new FirestorePermissionError({
+                path: userDocRef.path,
+                operation: 'create',
+                requestResourceData: userData,
+            } satisfies SecurityRuleContext);
+
+            errorEmitter.emit('permission-error', permissionError);
+            toast({
+                title: "Permission Denied",
+                description: "You don't have permission to create users.",
+                variant: "destructive",
+            });
+        })
+        .finally(() => {
+            setIsLoading(false);
+        });
+
     } catch (error: any) {
       let friendlyMessage = 'An unexpected error occurred.';
       if (error.code === 'auth/email-already-in-use') {
@@ -78,7 +113,6 @@ export function AddUserDialog({ children }: { children: React.ReactNode }) {
         description: friendlyMessage,
         variant: 'destructive',
       });
-    } finally {
       setIsLoading(false);
     }
   }
@@ -90,7 +124,7 @@ export function AddUserDialog({ children }: { children: React.ReactNode }) {
         <DialogHeader>
           <DialogTitle>Add New User</DialogTitle>
           <DialogDescription>
-            Create a new user account and assign them a role. An email with login details will be sent.
+            Create a new user account and assign them a role.
           </DialogDescription>
         </DialogHeader>
         <Form {...form}>

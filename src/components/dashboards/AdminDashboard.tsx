@@ -3,7 +3,7 @@
 
 import { UserData } from "@/hooks/use-auth";
 import { Button } from "@/components/ui/button";
-import { auth, db } from "@/lib/firebase";
+import { useAuth as useFirebaseAuth, useFirestore } from "@/firebase/provider";
 import { doc, updateDoc } from "firebase/firestore";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -16,6 +16,8 @@ import { AddUserDialog } from "@/components/admin/add-user-dialog";
 import { useToast } from "@/hooks/use-toast";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import PerformanceOverview from "@/components/admin/performance-overview";
+import { errorEmitter } from "@/firebase/error-emitter";
+import { FirestorePermissionError, SecurityRuleContext } from "@/firebase/errors";
 
 function getInitials(name: string) {
   if (!name) return 'U';
@@ -113,41 +115,65 @@ function UserManagementTable({ users, loading, onRoleChange, onStatusChange }: {
 export default function AdminDashboard({ user, userData }: { user: any; userData: UserData | null; }) {
     const { users, loading } = useUsers();
     const { toast } = useToast();
+    const db = useFirestore();
+    const auth = useFirebaseAuth();
+
+    const handleLogout = () => {
+        if (auth) {
+            auth.signOut();
+        }
+    }
 
     const handleRoleChange = async (uid: string, role: UserData['role']) => {
-        try {
-            const userDocRef = doc(db, "users", uid);
-            await updateDoc(userDocRef, { role });
-            toast({
-                title: "User Updated",
-                description: `User role has been changed to ${role}.`,
+        if (!db) return;
+        const userDocRef = doc(db, "users", uid);
+        const updateData = { role };
+        updateDoc(userDocRef, updateData)
+            .then(() => {
+                toast({
+                    title: "User Updated",
+                    description: `User role has been changed to ${role}.`,
+                });
+            })
+            .catch(async (serverError) => {
+                const permissionError = new FirestorePermissionError({
+                    path: userDocRef.path,
+                    operation: 'update',
+                    requestResourceData: updateData,
+                } satisfies SecurityRuleContext);
+                errorEmitter.emit('permission-error', permissionError);
+                toast({
+                    title: "Permission Denied",
+                    description: "You don't have permission to change user roles.",
+                    variant: "destructive",
+                });
             });
-        } catch (error) {
-            console.error("Error updating user role:", error);
-            toast({
-                title: "Error",
-                description: "Could not update user role.",
-                variant: "destructive",
-            });
-        }
     };
     
     const handleStatusChange = async (uid: string, status: UserData['status']) => {
-        try {
-            const userDocRef = doc(db, "users", uid);
-            await updateDoc(userDocRef, { status });
-            toast({
-                title: "User Updated",
-                description: `User status has been changed to ${status}.`,
+        if (!db) return;
+        const userDocRef = doc(db, "users", uid);
+        const updateData = { status };
+        await updateDoc(userDocRef, updateData)
+            .then(() => {
+                toast({
+                    title: "User Updated",
+                    description: `User status has been changed to ${status}.`,
+                });
+            })
+            .catch(async (serverError) => {
+                 const permissionError = new FirestorePermissionError({
+                    path: userDocRef.path,
+                    operation: 'update',
+                    requestResourceData: updateData,
+                } satisfies SecurityRuleContext);
+                errorEmitter.emit('permission-error', permissionError);
+                toast({
+                    title: "Permission Denied",
+                    description: "You don't have permission to change user status.",
+                    variant: "destructive",
+                });
             });
-        } catch (error) {
-            console.error("Error updating user status:", error);
-            toast({
-                title: "Error",
-                description: "Could not update user status.",
-                variant: "destructive",
-            });
-        }
     };
 
     return (
@@ -162,7 +188,7 @@ export default function AdminDashboard({ user, userData }: { user: any; userData
                         <p className="font-semibold">{userData?.name}</p>
                         <p className="text-xs text-muted-foreground">{userData?.email}</p>
                     </div>
-                    <Button variant="outline" size="icon" onClick={() => auth.signOut()}>
+                    <Button variant="outline" size="icon" onClick={handleLogout}>
                         <LogOut className="h-4 w-4" />
                         <span className="sr-only">Logout</span>
                     </Button>
@@ -196,5 +222,3 @@ export default function AdminDashboard({ user, userData }: { user: any; userData
         </div>
     );
 }
-
-    

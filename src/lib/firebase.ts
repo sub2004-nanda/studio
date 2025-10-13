@@ -1,4 +1,4 @@
-
+// This file is deprecated. Please use the hooks and providers from /src/firebase/index.ts
 import { initializeApp, getApps, getApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
@@ -12,7 +12,7 @@ const firebaseConfig = {
   "messagingSenderId": "997027446757"
 };
 
-// Initialize Firebase
+
 let app;
 if (getApps().length === 0) {
     app = initializeApp(firebaseConfig);

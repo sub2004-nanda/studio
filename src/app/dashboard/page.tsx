@@ -3,9 +3,9 @@
 
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
-import { useAuth, UserData } from "@/hooks/use-auth";
+import { useAuth } from "@/hooks/use-auth";
 import { Button } from "@/components/ui/button";
-import { auth } from "@/lib/firebase";
+import { useAuth as useFirebaseAuth } from "@/firebase/provider";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Loader2 } from "lucide-react";
 import Logo from "@/components/icons/logo";
@@ -14,6 +14,13 @@ import ManagerDashboard from "@/components/dashboards/ManagerDashboard";
 import EmployeeDashboard from "@/components/dashboards/EmployeeDashboard";
 
 function PendingApproval({ user }: { user: any; }) {
+  const auth = useFirebaseAuth();
+  const handleLogout = () => {
+    if (auth) {
+        auth.signOut();
+    }
+  }
+
   return (
     <div className="flex min-h-screen flex-col items-center justify-center bg-muted/50 p-4 text-center">
        <Card className="w-full max-w-md">
@@ -30,7 +37,7 @@ function PendingApproval({ user }: { user: any; }) {
           <p className="mb-6">
             Your account is currently under admin verification. You will be notified once your account is approved.
           </p>
-          <Button onClick={() => auth.signOut()}>Logout</Button>
+          <Button onClick={handleLogout}>Logout</Button>
         </CardContent>
       </Card>
     </div>
