@@ -2,49 +2,18 @@
 "use client";
 
 import { UserData } from "@/hooks/use-auth";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Users, Target, CheckSquare, BarChart as BarChartIcon, Bell, ArrowRight, TrendingUp, Users2, Activity, Lightbulb, Bot, Trophy, Mic, Eye } from "lucide-react";
-import Link from "next/link";
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, LineChart, Line } from 'recharts';
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Users, Target, CheckSquare, BarChart as BarChartIcon, Bell, TrendingUp, Users2, Activity, Bot, Trophy, Mic, Eye } from "lucide-react";
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import ProductivityHeatmap from "./ProductivityHeatmap";
+import { FeatureCard } from "./FeatureCard";
+
 
 const teamData = [
   { name: 'You', performance: 91 },
   { name: 'Team Avg.', performance: 85 },
   { name: 'Company Avg.', performance: 82 },
 ];
-
-const taskData = [
-  { date: 'Mon', completed: 12 },
-  { date: 'Tue', completed: 15 },
-  { date: 'Wed', completed: 10 },
-  { date: 'Thu', completed: 18 },
-  { date: 'Fri', completed: 20 },
-];
-
-const FeatureCard = ({ title, description, icon: Icon, href }: { title: string, description: string, icon: React.ElementType, href: string }) => {
-    return (
-        <Card className="hover:shadow-lg transition-shadow">
-            <CardHeader>
-                <div className="flex items-center justify-between">
-                    <CardTitle className="text-lg font-medium">{title}</CardTitle>
-                    <div className="p-2 bg-primary/10 rounded-md">
-                      <Icon className="h-5 w-5 text-primary" />
-                    </div>
-                </div>
-                <CardDescription>{description}</CardDescription>
-            </CardHeader>
-            <CardContent>
-                <Link href={href} passHref>
-                    <Button variant="outline" className="w-full">
-                        Manage {title} <ArrowRight className="ml-2 h-4 w-4" />
-                    </Button>
-                </Link>
-            </CardContent>
-        </Card>
-    )
-}
 
 const StatCard = ({ title, value, icon: Icon, change }: { title: string, value: string | number, icon: React.ElementType, change?: string }) => {
     return (
@@ -103,14 +72,14 @@ export default function ManagerDashboard({ user, userData }: { user: any; userDa
                     </CardHeader>
                     <CardContent className="space-y-4">
                         <div className="flex items-start gap-3">
-                            <Lightbulb className="h-5 w-5 text-yellow-400 mt-1" />
+                            <Bot className="h-5 w-5 text-primary mt-1" />
                             <div>
                                 <p className="font-medium text-sm">Potential Burnout Risk</p>
                                 <p className="text-muted-foreground text-sm">"Employee X" has a high task load. Consider reassigning non-critical tasks.</p>
                             </div>
                         </div>
                          <div className="flex items-start gap-3">
-                            <Lightbulb className="h-5 w-5 text-yellow-400 mt-1" />
+                            <Bot className="h-5 w-5 text-primary mt-1" />
                             <div>
                                 <p className="font-medium text-sm">Sentiment Analysis</p>
                                 <p className="text-muted-foreground text-sm">Sentiment analysis suggests "Employee Y" may be feeling overwhelmed. A quick check-in could be beneficial.</p>
@@ -129,7 +98,7 @@ export default function ManagerDashboard({ user, userData }: { user: any; userDa
                 </Card>
             </div>
             
-            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
                 <FeatureCard
                     title="Team"
                     description="View and manage your department's employees."
@@ -149,7 +118,7 @@ export default function ManagerDashboard({ user, userData }: { user: any; userDa
                     href="/dashboard/tasks"
                 />
                 <FeatureCard
-                    title="AI Reports & Analytics"
+                    title="AI Reports"
                     description="Generate AI-summarized performance reports."
                     icon={BarChartIcon}
                     href="/dashboard/reports"
@@ -161,34 +130,10 @@ export default function ManagerDashboard({ user, userData }: { user: any; userDa
                     href="/dashboard/communication"
                 />
                  <FeatureCard
-                    title="Leaderboards & Badges"
+                    title="Leaderboards"
                     description="Boost motivation with gamified goals and KPIs."
                     icon={Trophy}
                     href="/dashboard/goals"
-                />
-                <FeatureCard
-                    title="Growth & Skills"
-                    description="Track employee growth and identify skill gaps."
-                    icon={TrendingUp}
-                    href="/dashboard/team"
-                />
-                 <FeatureCard
-                    title="Collaboration Wall"
-                    description="A social feed for department updates and achievements."
-                    icon={Users2}
-                    href="/dashboard/communication"
-                />
-                 <FeatureCard
-                    title="Voice Commands"
-                    description="Manage tasks with hands-free voice commands."
-                    icon={Mic}
-                    href="/dashboard/tasks"
-                />
-                 <FeatureCard
-                    title="Data Privacy"
-                    description="Review data access logs and transparency reports."
-                    icon={Eye}
-                    href="/dashboard/privacy"
                 />
             </div>
         </>
