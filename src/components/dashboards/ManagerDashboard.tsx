@@ -4,9 +4,10 @@
 import { UserData } from "@/hooks/use-auth";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Users, Target, CheckSquare, BarChart as BarChartIcon, Bell, ArrowRight, TrendingUp, Users2, Activity } from "lucide-react";
+import { Users, Target, CheckSquare, BarChart as BarChartIcon, Bell, ArrowRight, TrendingUp, Users2, Activity, Lightbulb, Bot } from "lucide-react";
 import Link from "next/link";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, LineChart, Line } from 'recharts';
+import ProductivityHeatmap from "./ProductivityHeatmap";
 
 const teamData = [
   { name: 'You', performance: 91 },
@@ -77,8 +78,8 @@ export default function ManagerDashboard({ user, userData }: { user: any; userDa
                 <StatCard title="Completed Tasks" value="45" icon={CheckSquare} change="+10 from last week" />
             </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
-                 <Card>
+            <div className="grid grid-cols-1 lg:grid-cols-5 gap-8 mb-8">
+                 <Card className="lg:col-span-3">
                     <CardHeader>
                         <CardTitle>Team Performance vs. Averages</CardTitle>
                     </CardHeader>
@@ -95,21 +96,35 @@ export default function ManagerDashboard({ user, userData }: { user: any; userDa
                         </ResponsiveContainer>
                     </CardContent>
                 </Card>
-                 <Card>
+                 <Card className="lg:col-span-2">
                     <CardHeader>
-                        <CardTitle>Weekly Task Completion</CardTitle>
+                        <CardTitle>AI Performance Insights</CardTitle>
+                        <CardDescription>Suggestions to boost team productivity.</CardDescription>
+                    </CardHeader>
+                    <CardContent className="space-y-4">
+                        <div className="flex items-start gap-3">
+                            <Lightbulb className="h-5 w-5 text-yellow-400 mt-1" />
+                            <div>
+                                <p className="font-medium text-sm">Potential Burnout Risk</p>
+                                <p className="text-muted-foreground text-sm">"Employee X" has a high task load. Consider reassigning non-critical tasks.</p>
+                            </div>
+                        </div>
+                         <div className="flex items-start gap-3">
+                            <Lightbulb className="h-5 w-5 text-yellow-400 mt-1" />
+                            <div>
+                                <p className="font-medium text-sm">Training Opportunity</p>
+                                <p className="text-muted-foreground text-sm">Team B is showing lower accuracy. A refresher session might be helpful.</p>
+                            </div>
+                        </div>
+                    </CardContent>
+                </Card>
+                 <Card className="lg:col-span-5">
+                    <CardHeader>
+                        <CardTitle>Real-Time Productivity Heatmap</CardTitle>
+                        <CardDescription>Live overview of team activity and performance levels.</CardDescription>
                     </CardHeader>
                     <CardContent>
-                        <ResponsiveContainer width="100%" height={300}>
-                            <LineChart data={taskData}>
-                                <CartesianGrid strokeDasharray="3 3" />
-                                <XAxis dataKey="date" />
-                                <YAxis />
-                                <Tooltip />
-                                <Legend />
-                                <Line type="monotone" dataKey="completed" stroke="hsl(var(--primary))" activeDot={{ r: 8 }}/>
-                            </LineChart>
-                        </ResponsiveContainer>
+                       <ProductivityHeatmap />
                     </CardContent>
                 </Card>
             </div>
@@ -121,11 +136,11 @@ export default function ManagerDashboard({ user, userData }: { user: any; userDa
                     icon={Users}
                     href="/dashboard/team"
                 />
-                <FeatureCard
-                    title="Goals & KPIs"
-                    description="Set and track department and individual goals."
-                    icon={Target}
-                    href="/dashboard/goals"
+                 <FeatureCard
+                    title="Smart Allocation"
+                    description="AI-powered task assignment based on skill & workload."
+                    icon={Bot}
+                    href="/dashboard/tasks"
                 />
                 <FeatureCard
                     title="Task Review"
@@ -144,6 +159,12 @@ export default function ManagerDashboard({ user, userData }: { user: any; userDa
                     description="Send announcements and messages to your team."
                     icon={Bell}
                     href="/dashboard/communication"
+                />
+                 <FeatureCard
+                    title="Goals & KPIs"
+                    description="Set and track department and individual goals."
+                    icon={Target}
+                    href="/dashboard/goals"
                 />
             </div>
         </>
