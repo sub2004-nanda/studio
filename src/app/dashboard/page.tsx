@@ -46,24 +46,9 @@ function PendingApproval({ user }: { user: any; }) {
 
 export default function DashboardPage() {
   const { user, userData, loading } = useAuth();
-  const router = useRouter();
-
-  useEffect(() => {
-    if (!loading && !user) {
-      router.push("/login");
-    }
-  }, [user, loading, router]);
-
-  if (loading) {
-    return (
-      <div className="flex min-h-screen items-center justify-center">
-        <Loader2 className="h-12 w-12 animate-spin text-primary" />
-      </div>
-    );
-  }
 
   if (!user || !userData) {
-    return null; // Redirection is handled by the effect or still loading
+    return null; // The layout handles loading and redirection
   }
   
   if (userData.status === 'pending_approval') {
