@@ -10,7 +10,8 @@ import {
   Activity,
   Target,
   CheckSquare,
-  BarChart
+  BarChart,
+  Building
 } from "lucide-react";
 import {
   DropdownMenu,
@@ -50,6 +51,7 @@ export default function DashboardHeader() {
 
   const adminNav = [
      { href: "/dashboard/users", icon: Users2, label: "Users", roles: ['admin'] },
+     { href: "/dashboard/departments", icon: Building, label: "Departments", roles: ['admin']},
      { href: "/dashboard/projects", icon: FolderKanban, label: "Projects", roles: ['admin'] },
      { href: "/dashboard/performance", icon: Activity, label: "Performance", roles: ['admin'] },
   ]

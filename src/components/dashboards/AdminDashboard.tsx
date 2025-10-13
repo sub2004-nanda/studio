@@ -68,6 +68,12 @@ export default function AdminDashboard({ user, userData }: { user: any; userData
                     icon={Users}
                     href="/dashboard/users"
                 />
+                 <AdminFeatureCard
+                    title="Departments"
+                    description="Define departments and assign managers."
+                    icon={Building}
+                    href="/dashboard/departments"
+                />
                 <AdminFeatureCard
                     title="Assign Projects"
                     description="Assign new projects to managers."
