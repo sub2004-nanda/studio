@@ -3,7 +3,7 @@
 
 import { UserData } from "@/hooks/use-auth";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { Users, Target, CheckSquare, BarChart as BarChartIcon, Bell, TrendingUp, Users2, Activity, Bot, Loader2 } from "lucide-react";
+import { Users, Target, CheckSquare, BarChart as BarChartIcon, Bell, TrendingUp, Users2, Activity, Bot, Loader2, Trophy } from "lucide-react";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import ProductivityHeatmap from "./ProductivityHeatmap";
 import { FeatureCard } from "./FeatureCard";
