@@ -36,9 +36,9 @@ const Hero = () => {
     <section className="relative pt-32 pb-20 lg:pt-40 lg:pb-24 overflow-hidden">
       <div className="container relative">
          <m.div 
-            className="absolute inset-0 -z-10 opacity-20"
+            className="absolute inset-0 -z-10"
             initial={{ opacity: 0, scale: 1.1 }}
-            animate={{ opacity: 0.2, scale: 1 }}
+            animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 1.5, ease: "easeOut" }}
          >
             {dashboardImage && (
@@ -47,7 +47,7 @@ const Hero = () => {
                 alt={dashboardImage.description}
                 fill
                 priority
-                className="object-cover"
+                className="object-cover opacity-30"
                 data-ai-hint={dashboardImage.imageHint}
             />
             )}
