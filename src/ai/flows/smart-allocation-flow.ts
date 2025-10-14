@@ -19,13 +19,13 @@ const EmployeeSchema = z.object({
   performanceScore: z.number().describe('A score from 0-100 representing the employee\'s recent performance.'),
 });
 
-export const SmartAllocationInputSchema = z.object({
+const SmartAllocationInputSchema = z.object({
   taskDescription: z.string().describe('A detailed description of the task to be assigned.'),
   employees: z.array(EmployeeSchema).describe('A list of available employees to choose from.'),
 });
 export type SmartAllocationInput = z.infer<typeof SmartAllocationInputSchema>;
 
-export const SmartAllocationOutputSchema = z.object({
+const SmartAllocationOutputSchema = z.object({
   recommendedAssignee: z
     .string()
     .describe('The name of the employee who is the best fit for the task.'),
