@@ -15,16 +15,16 @@ import { parseISO, isSameDay } from 'date-fns';
 type TaskStatus = "Pending" | "In Progress" | "Submitted" | "Completed" | "Overdue";
 
 const tasks = [
-    { id: 1, title: "Prepare Q4 presentation", project: "Marketing Campaign", priority: "High", due: "2024-10-25", status: "In Progress" as TaskStatus },
-    { id: 2, title: "Update client contact list", project: "Admin", priority: "Medium", due: "2024-10-22", status: "Pending" as TaskStatus },
-    { id: 3, title: "Fix login page bug", project: "Website Revamp", priority: "High", due: "2024-10-20", status: "Submitted" as TaskStatus },
-    { id: 4, title: "Design new ad creatives", project: "Marketing Campaign", priority: "Medium", due: "2024-10-18", status: "Completed" as TaskStatus },
+    { id: 1, title: "Prepare Q4 presentation", project: "Marketing Campaign", priority: "High", due: "2024-10-28", status: "In Progress" as TaskStatus },
+    { id: 2, title: "Update client contact list", project: "Admin", priority: "Medium", due: "2024-10-29", status: "Pending" as TaskStatus },
+    { id: 3, title: "Fix login page bug", project: "Website Revamp", priority: "High", due: "2024-10-24", status: "Submitted" as TaskStatus },
+    { id: 4, title: "Design new ad creatives", project: "Marketing Campaign", priority: "Medium", due: "2024-10-22", status: "Completed" as TaskStatus },
     { id: 5, title: "Draft monthly newsletter", project: "Content Creation", priority: "Low", due: "2024-10-15", status: "Overdue" as TaskStatus },
-    { id: 6, title: "Review pull request #123", project: "Website Revamp", priority: "High", due: "2024-10-21", status: "In Progress" as TaskStatus },
+    { id: 6, title: "Review pull request #123", project: "Website Revamp", priority: "High", due: "2024-10-25", status: "In Progress" as TaskStatus },
     { id: 7, title: "Plan team offsite event", project: "HR", priority: "Medium", due: "2024-11-05", status: "Pending" as TaskStatus },
     { id: 8, title: "Update documentation for API v2", project: "Website Revamp", priority: "High", due: "2024-11-15", status: "In Progress" as TaskStatus },
-    { id: 9, title: "Submit expense report for October", project: "Admin", priority: "Low", due: "2024-11-01", status: "Completed" as TaskStatus },
-    { id: 10, title: "Finalize 2025 budget proposal", project: "Finance", priority: "High", due: "2024-12-10", status: "Pending" as TaskStatus },
+    { id: 9, title: "Submit expense report for October", project: "Admin", priority: "Low", due: "2024-10-20", status: "Completed" as TaskStatus },
+    { id: 10, title: "Finalize 2025 budget proposal", project: "Finance", priority: "High", due: "2024-11-10", status: "Pending" as TaskStatus },
 ];
 
 const getStatusBadgeVariant = (status: TaskStatus) => {
