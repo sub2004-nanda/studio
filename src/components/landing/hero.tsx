@@ -34,26 +34,7 @@ const Hero = () => {
 
   return (
     <section className="relative pt-32 pb-20 lg:pt-40 lg:pb-24 overflow-hidden">
-      <div className="container relative">
-         <m.div 
-            className="absolute inset-0 -z-10"
-            initial={{ opacity: 0, scale: 1.1 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 1.5, ease: "easeOut" }}
-         >
-            {dashboardImage && (
-            <Image 
-                src={dashboardImage.imageUrl}
-                alt={dashboardImage.description}
-                fill
-                priority
-                className="object-cover opacity-30"
-                data-ai-hint={dashboardImage.imageHint}
-            />
-            )}
-             <div className="absolute inset-0 bg-gradient-to-t from-background via-background/80 to-transparent"></div>
-        </m.div>
-
+      <div className="container relative z-10">
         <m.div
           className="text-center"
           variants={containerVariants}
@@ -83,6 +64,25 @@ const Hero = () => {
           </m.div>
         </m.div>
       </div>
+      
+      {/* Background Image Container */}
+      <m.div
+        className="absolute inset-0 top-1/4 -z-0"
+        initial={{ opacity: 0, scale: 1.2 }}
+        animate={{ opacity: 0.15, scale: 1 }}
+        transition={{ duration: 1.5, ease: "easeOut", delay: 0.4 }}
+      >
+        {dashboardImage && (
+          <Image
+            src={dashboardImage.imageUrl}
+            alt={dashboardImage.description}
+            layout="fill"
+            objectFit="cover"
+            priority
+            data-ai-hint={dashboardImage.imageHint}
+          />
+        )}
+      </m.div>
     </section>
   );
 };
