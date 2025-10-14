@@ -22,7 +22,7 @@ const tasks = [
     { id: 5, title: "Draft monthly newsletter", project: "Content Creation", priority: "Low", due: "2025-10-15", status: "Overdue" as TaskStatus },
     { id: 6, title: "Review pull request #123", project: "Website Revamp", priority: "High", due: "2025-10-25", status: "In Progress" as TaskStatus },
     { id: 7, title: "Plan team offsite event", project: "HR", priority: "Medium", due: "2025-11-05", status: "Pending" as TaskStatus },
-    { id: 8, title: "Update documentation for API v2", project: "Website Revamp", priority: "High", due: "2025-11-15", status: "In Progress" as TaskStatus },
+    { id: 8, title: "Finalize user authentication flow", project: "Website Revamp", priority: "High", due: "2025-11-15", status: "Pending" as TaskStatus },
     { id: 9, title: "Submit expense report for October", project: "Admin", priority: "Low", due: "2025-10-20", status: "Completed" as TaskStatus },
     { id: 10, title: "Finalize 2025 budget proposal", project: "Finance", priority: "High", due: "2025-11-10", status: "Pending" as TaskStatus },
 ];
@@ -68,7 +68,7 @@ export default function TasksPage() {
                 <CardContent>
                     <p className="font-medium text-amber-900">"Finalize user authentication flow"</p>
                     <p className="text-sm text-amber-700 mt-1">Based on your recent work on the 'Website Revamp' project, completing this task would be most efficient and help you meet the upcoming milestone.</p>
-                     <Button variant="secondary" size="sm" className="mt-4">Start Task</Button>
+                     <Button variant="secondary" size="sm" className="mt-4" onClick={() => handleStatusChange(8, 'In Progress')}>Start Task</Button>
                 </CardContent>
             </Card>
 
