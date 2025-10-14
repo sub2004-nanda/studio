@@ -1,0 +1,46 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Helper functions to improve readability
+    function isAuth() {
+      return request.auth != null;
+    }
+
+    function isAuthOwner() {
+      return isAuth() && request.auth.uid == resource.data.uid;
+    }
+
+    function getUserRole(uid) {
+      return get(/databases/$(database)/documents/users/$(uid)).data.role;
+    }
+
+    function isAdmin() {
+      return isAuth() && getUserRole(request.auth.uid) == 'admin';
+    }
+
+    // Rules for the 'users' collection
+    match /users/{userId} {
+      // Admins can read, write, create, and delete any user document.
+      allow read, write, create, delete: if isAdmin();
+      
+      // Authenticated users can read their own user document.
+      allow get: if isAuth() && request.auth.uid == userId;
+
+      // Authenticated users can create their own user document upon signup.
+      allow create: if isAuth() && request.auth.uid == userId;
+
+      // Users can update their own document, but cannot change their role or status.
+      allow update: if isAuth() && request.auth.uid == userId
+                    && request.resource.data.role == resource.data.role
+                    && request.resource.data.status == resource.data.status;
+    }
+
+    // Rules for the 'departments' collection
+    match /departments/{departmentId} {
+      // Admins have full access to create, read, update, and delete departments.
+      allow read, write, create, delete: if isAdmin();
+    }
+  }
+}
