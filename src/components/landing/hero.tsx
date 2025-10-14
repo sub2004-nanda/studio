@@ -4,7 +4,6 @@
 import { m } from "framer-motion";
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
-import { PlayCircle } from "lucide-react";
 
 const Hero = () => {
   const containerVariants = {
@@ -36,7 +35,7 @@ const Hero = () => {
       </div>
        {/* Animated Blobs */}
       <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-purple-600/10 rounded-full filter blur-3xl opacity-50 animate-blob"></div>
-      <div className="absolute top-1/2 right-1/4 w-96 h-96 bg-blue-600/10 rounded-full filter blur-3xl opacity-50 animate-blob animation-delay-2000"></div>
+      <div className="absolute top-1/2 right-1/4 w-96 h-96 bg-blue-600/10 rounded-full filter blur-3xl opacity-50 animate-blob-slow animation-delay-2000"></div>
       <div className="absolute bottom-1/4 left-1/3 w-96 h-96 bg-cyan-600/10 rounded-full filter blur-3xl opacity-50 animate-blob animation-delay-4000"></div>
 
       <div className="container relative">
@@ -64,10 +63,6 @@ const Hero = () => {
           >
             <Button size="lg" className="bg-gradient-to-r from-blue-500 to-purple-600 text-white font-bold text-lg px-8 py-6 rounded-full shadow-[0_0_20px_rgba(74,144,226,0.5)] transition-all duration-300 hover:scale-105 hover:shadow-[0_0_30px_rgba(74,144,226,0.8)]">
               <Link href="/signup">Get Started for Free</Link>
-            </Button>
-            <Button size="lg" variant="outline" className="bg-white/50 backdrop-blur-md border border-gray-200/80 text-gray-800 font-bold text-lg px-8 py-6 rounded-full transition-all duration-300 hover:bg-white/80 hover:scale-105">
-                <PlayCircle className="mr-2 h-5 w-5" />
-                Watch Demo
             </Button>
           </m.div>
         </m.div>
