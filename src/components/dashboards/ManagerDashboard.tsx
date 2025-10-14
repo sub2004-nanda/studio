@@ -171,7 +171,7 @@ export default function ManagerDashboard({ user, userData }: { user: any; userDa
                     title="Smart Allocation"
                     description="AI-powered task assignment based on skill & workload."
                     icon={Bot}
-                    href="/dashboard/tasks"
+                    href="/dashboard/smart-allocation"
                 />
                 <FeatureCard
                     title="Task Review"
