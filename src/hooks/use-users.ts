@@ -13,7 +13,7 @@ export function useUsers() {
   const [users, setUsers] = useState<UserData[]>([]);
   const [loading, setLoading] = useState(true);
   const db = useFirestore();
-  const { status, userData } = useAuth();
+  const { status, user } = useAuth(); // Changed from userData to user
 
   useEffect(() => {
     // If auth state is still loading, we are also loading.
@@ -22,14 +22,15 @@ export function useUsers() {
       return;
     }
 
-    // If auth is resolved but user is not an admin (or not logged in), stop loading and return empty array.
-    if (status !== 'resolved' || !userData || userData.role !== 'admin' || !db) {
+    // If auth is resolved but there's no logged-in user or db connection, stop.
+    // Any authenticated user can now fetch the user list.
+    if (status !== 'resolved' || !user || !db) {
       setUsers([]);
       setLoading(false);
       return;
     }
 
-    // Now we are sure we have a logged-in admin.
+    // Now we are sure we have a logged-in user.
     const usersCollectionRef = collection(db, 'users');
     const q = query(usersCollectionRef, orderBy('name'));
 
@@ -47,12 +48,14 @@ export function useUsers() {
       } satisfies SecurityRuleContext);
       errorEmitter.emit('permission-error', permissionError);
 
+      console.error("Permission denied while fetching users. You may need to adjust your Firestore security rules to allow reads on the 'users' collection.");
+
       setUsers([]);
       setLoading(false);
     });
 
     return () => unsubscribe();
-  }, [db, status, userData]);
+  }, [db, status, user]);
 
   return { users, loading };
 }

@@ -8,8 +8,19 @@ import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useUsers } from "@/hooks/use-users";
+import { useState } from "react";
+import { useAuth } from "@/hooks/use-auth";
+import { useToast } from "@/hooks/use-toast";
 
-const recognitions = [
+type Recognition = {
+    id: number;
+    from: string;
+    to: string;
+    message: string;
+    timestamp: string;
+};
+
+const initialRecognitions: Recognition[] = [
     { id: 1, from: 'Alice', to: 'Bob', message: 'Thanks for helping me with that complex bug, you are a lifesaver!', timestamp: '2 hours ago' },
     { id: 2, from: 'Charlie', to: 'Alice', message: 'Amazing presentation today! The client was really impressed.', timestamp: '1 day ago' },
     { id: 3, from: 'Bob', to: 'David', message: 'Great job on the project proposal. Your hard work really paid off.', timestamp: '3 days ago' },
@@ -22,8 +33,52 @@ function getInitials(name: string) {
 
 
 export default function RecognitionPage() {
-    // In a real app, users would not include the current user.
+    const { user, userData } = useAuth();
     const { users } = useUsers(); 
+    const { toast } = useToast();
+    const [recognitions, setRecognitions] = useState<Recognition[]>(initialRecognitions);
+    const [selectedUser, setSelectedUser] = useState<string | null>(null);
+    const [message, setMessage] = useState('');
+    const [isLoading, setIsLoading] = useState(false);
+
+    const handleSendKudos = () => {
+        if (!selectedUser || !message.trim()) {
+            toast({
+                title: "Incomplete Submission",
+                description: "Please select a colleague and write a message.",
+                variant: "destructive",
+            });
+            return;
+        }
+
+        setIsLoading(true);
+
+        const toUser = users.find(u => u.uid === selectedUser);
+
+        const newRecognition: Recognition = {
+            id: recognitions.length + 1,
+            from: userData?.name || 'Anonymous',
+            to: toUser?.name || 'Selected User',
+            message: message,
+            timestamp: 'Just now',
+        };
+
+        // In a real app, this would be a Firestore write.
+        // For now, we simulate it with local state.
+        setTimeout(() => {
+             setRecognitions([newRecognition, ...recognitions]);
+             setMessage('');
+             setSelectedUser(null); // This will reset the select trigger text
+             toast({
+                title: "Kudos Sent!",
+                description: `Your recognition for ${toUser?.name} has been posted.`,
+            });
+            setIsLoading(false);
+        }, 500);
+    };
+
+    // Filter out the current user from the list of colleagues
+    const colleagues = users.filter(u => u.uid !== user?.uid);
 
     return (
         <>
@@ -42,22 +97,27 @@ export default function RecognitionPage() {
                             </CardTitle>
                         </CardHeader>
                         <CardContent className="space-y-4">
-                             <Select>
+                             <Select onValueChange={setSelectedUser} value={selectedUser || ''}>
                                 <SelectTrigger>
                                     <SelectValue placeholder="Select a colleague..." />
                                 </SelectTrigger>
                                 <SelectContent>
-                                    {users.map(user => (
+                                    {colleagues.map(user => (
                                         <SelectItem key={user.uid} value={user.uid}>
                                             {user.name}
                                         </SelectItem>
                                     ))}
+                                    {colleagues.length === 0 && <SelectItem value="loading" disabled>Loading colleagues...</SelectItem>}
                                 </SelectContent>
                             </Select>
-                            <Textarea placeholder="Write a message of appreciation..." />
-                            <Button className="w-full">
+                            <Textarea 
+                                placeholder="Write a message of appreciation..." 
+                                value={message}
+                                onChange={(e) => setMessage(e.target.value)}
+                            />
+                            <Button className="w-full" onClick={handleSendKudos} disabled={isLoading}>
                                 <Send className="mr-2 h-4 w-4" />
-                                Send Kudos
+                                {isLoading ? 'Sending...' : 'Send Kudos'}
                             </Button>
                         </CardContent>
                     </Card>
