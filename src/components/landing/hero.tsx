@@ -4,6 +4,8 @@
 import { m } from "framer-motion";
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
+import Image from 'next/image';
+import { PlaceHolderImages } from "@/lib/placeholder-images";
 
 const Hero = () => {
   const containerVariants = {
@@ -27,17 +29,11 @@ const Hero = () => {
       },
     },
   };
+  
+  const dashboardImage = PlaceHolderImages.find(img => img.id === 'hero-dashboard');
 
   return (
-    <section className="relative pt-32 pb-20 lg:pt-48 lg:pb-32 overflow-hidden">
-      <div className="absolute inset-0 -z-20">
-         <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-white via-white to-blue-200/30" />
-      </div>
-       {/* Animated Blobs */}
-      <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-purple-600/10 rounded-full filter blur-3xl opacity-50 animate-blob"></div>
-      <div className="absolute top-1/2 right-1/4 w-96 h-96 bg-blue-600/10 rounded-full filter blur-3xl opacity-50 animate-blob-slow animation-delay-2000"></div>
-      <div className="absolute bottom-1/4 left-1/3 w-96 h-96 bg-cyan-600/10 rounded-full filter blur-3xl opacity-50 animate-blob animation-delay-4000"></div>
-
+    <section className="relative pt-32 pb-20 lg:pt-40 lg:pb-24 overflow-hidden">
       <div className="container relative">
         <m.div
           className="text-center"
@@ -65,6 +61,27 @@ const Hero = () => {
               <Link href="/signup">Get Started for Free</Link>
             </Button>
           </m.div>
+
+           {dashboardImage && (
+             <m.div 
+                className="mt-16 lg:mt-20"
+                variants={itemVariants}
+             >
+                <div className="relative shadow-2xl shadow-blue-500/20 rounded-2xl">
+                   <div className="absolute inset-0 border-2 border-transparent group-hover:border-blue-400 rounded-2xl transition-all duration-300" />
+                    <Image 
+                        src={dashboardImage.imageUrl}
+                        alt={dashboardImage.description}
+                        width={1200}
+                        height={800}
+                        priority
+                        className="rounded-xl border-4 border-white/50"
+                        data-ai-hint={dashboardImage.imageHint}
+                    />
+                </div>
+            </m.div>
+           )}
+
         </m.div>
       </div>
     </section>
