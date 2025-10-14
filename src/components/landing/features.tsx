@@ -76,9 +76,9 @@ const Features = () => {
           viewport={{ once: true, amount: 0.2 }}
         >
           {features.map((feature, index) => (
-            <m.div key={index} variants={itemVariants}>
-              <div className="bg-white/40 backdrop-blur-md border border-gray-200/60 h-full p-8 rounded-2xl transition-all duration-300 ease-in-out hover:border-blue-400/50 hover:-translate-y-2 hover:shadow-2xl hover:shadow-blue-500/10">
-                <div className="mb-4 p-3 bg-gradient-to-br from-blue-500/20 to-purple-600/20 rounded-lg w-fit shadow-lg border border-white/10">
+            <m.div key={index} variants={itemVariants} className="[perspective:1000px]">
+              <div className="bg-white/40 backdrop-blur-md border border-gray-200/60 h-full p-8 rounded-2xl transition-all duration-300 ease-in-out hover:border-blue-400/50 hover:shadow-2xl hover:shadow-blue-500/10 [transform-style:preserve-3d] hover:[transform:rotateY(var(--rotate-y,0))_rotateX(var(--rotate-x,0))_translateZ(5px)]">
+                <div className="mb-4 p-3 bg-gradient-to-br from-blue-500/20 to-purple-600/20 rounded-lg w-fit shadow-lg border border-white/10 animate-blob-slow">
                   <feature.icon className="h-7 w-7 text-blue-600" />
                 </div>
                 <h3 className="font-headline text-2xl font-semibold mb-2 text-gray-900">{feature.title}</h3>
