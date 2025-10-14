@@ -4,41 +4,42 @@ service cloud.firestore {
   match /databases/{database}/documents {
 
     // Helper functions
-    function isSignedIn() {
-      return request.auth != null;
-    }
-
     function isOwner(userId) {
       return request.auth.uid == userId;
     }
 
-    function getUserData(userId) {
-      return get(/databases/$(database)/documents/users/$(userId)).data;
+    function isSignedIn() {
+      return request.auth != null;
     }
 
-    function isAdmin() {
-      return isSignedIn() && getUserData(request.auth.uid).role == 'admin';
+    function getUserData() {
+      return get(/databases/$(database)/documents/users/$(request.auth.uid)).data;
     }
-    
-    // /users/{userId}
+
+    // Rules for 'users' collection
     match /users/{userId} {
-      allow read: if isSignedIn() && (isOwner(userId) || isAdmin());
-      allow list: if isAdmin();
-      allow create: if isSignedIn(); // Allow any signed-in user to create their own user document
-      allow update: if isSignedIn() && isAdmin(); // Only admins can update user roles/status
-      allow delete: if false; // Nobody can delete user records for now
-    }
+      // Allow users to read their own data
+      allow read: if isSignedIn() && isOwner(userId);
 
-    // /departments/{departmentId}
-    match /departments/{departmentId} {
-      allow read: if isSignedIn(); // Allow any signed-in user to read department lists
-      allow create: if isAdmin(); // Only admins can create new departments
-      allow update, delete: if isAdmin(); // Only admins can modify or delete departments
+      // Allow users to create their own user document upon signup
+      allow create: if isSignedIn() && isOwner(userId);
+      
+      // Allow admins to update user roles or statuses
+      allow update: if isSignedIn() && getUserData().role == 'admin';
     }
     
-    // /projects/{projectId}
-    match /projects/{projectId} {
-      allow read, write: if isSignedIn();
+    // Admins can read the entire 'users' collection
+    match /users {
+      allow list: if isSignedIn() && getUserData().role == 'admin';
+    }
+
+    // Rules for 'departments' collection
+    match /departments/{departmentId} {
+      // Allow admins to create new departments
+      allow create: if isSignedIn() && getUserData().role == 'admin';
+      
+      // Allow any signed-in user to read department lists
+      allow list, read: if isSignedIn();
     }
   }
 }
