@@ -56,11 +56,13 @@ const allTasks = [
     { id: 3, title: "Login Page Bug Fix", project: "Website Revamp", priority: "High" as const, due: "2025-10-24", status: "Completed" as const, assignee: 'Deepika' },
     { id: 4, title: "New Ad Creatives", project: "Marketing", priority: "Medium" as const, due: "2025-10-22", status: "Completed" as const, assignee: 'Omnshu' },
     { id: 5, title: "Draft Newsletter", project: "Content Creation", priority: "Low" as const, due: "2025-10-15", status: "Overdue" as const, assignee: 'Anjan' },
-    { id: 6, title: "Review PR #123", project: "Website Revamp", priority: "High" as const, due: "2025-10-25", status: "In Progress" as const, assignee: 'Deepika' },
+    { id: 6, title: "Review PR #123", project: "Website Revamp", priority: "High" as const, due: "2025-10-25", status: "Submitted" as const, assignee: 'Deepika' },
     { id: 7, title: "Plan Team Offsite", project: "HR", priority: "Medium" as const, due: "2025-11-05", status: "Pending" as const, assignee: 'Subrat' },
-    { id: 8, title: "User Auth Flow", project: "Website Revamp", priority: "High" as const, due: "2025-11-15", status: "Pending" as const, assignee: 'Ankit' },
+    { id: 8, title: "User Auth Flow", project: "Website Revamp", priority: "High" as const, due: "2025-11-15", status: "Submitted" as const, assignee: 'Ankit' },
     { id: 9, title: "Submit Expense Report", project: "Admin", priority: "Low" as const, due: "2025-10-20", status: "Completed" as const, assignee: 'Omnshu' },
     { id: 10, title: "2025 Budget Proposal", project: "Finance", priority: "High" as const, due: "2025-11-10", status: "Submitted" as const, assignee: 'Ankit' },
+    { id: 11, title: "Update Staging Environment", project: "Website Revamp", priority: "Medium" as const, due: "2025-11-01", status: "Submitted" as const, assignee: 'Subrat' },
+    { id: 12, title: "Create Social Media Graphics for Launch", project: "Marketing", priority: "Medium" as const, due: "2025-11-04", status: "Submitted" as const, assignee: 'Anjan' },
 ];
 
 // This hook simulates fetching tasks for the manager's team
