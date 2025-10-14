@@ -9,16 +9,6 @@ import { useAuth } from './use-auth';
 import { errorEmitter } from '@/firebase/error-emitter';
 import { FirestorePermissionError, SecurityRuleContext } from '@/firebase/errors';
 
-// Mock data to ensure the page is populated for demonstration
-const mockUsers: UserData[] = [
-    { uid: 'admin-user-id', name: 'Admin User', email: 'admin@example.com', role: 'admin', status: 'approved' },
-    { uid: 'manager-user-id', name: 'Manager User', email: 'manager@example.com', role: 'manager', status: 'approved', departmentId: 'dept-eng' },
-    { uid: 'employee-user-id-1', name: 'Employee One', email: 'employee1@example.com', role: 'employee', status: 'approved', departmentId: 'dept-eng' },
-    { uid: 'employee-user-id-2', name: 'Employee Two', email: 'employee2@example.com', role: 'employee', status: 'pending_approval' },
-    { uid: 'viewer-user-id', name: 'Viewer User', email: 'viewer@example.com', role: 'viewer', status: 'approved' },
-];
-
-
 export function useUsers() {
   const [users, setUsers] = useState<UserData[]>([]);
   const [loading, setLoading] = useState(true);
@@ -31,15 +21,6 @@ export function useUsers() {
       setLoading(true);
       return;
     }
-
-    // --- Using Mock Data for Demonstration ---
-    // In a production app, you would remove this block and rely on the Firestore listener below.
-    if (process.env.NODE_ENV === 'development') {
-        setUsers(mockUsers);
-        setLoading(false);
-        return;
-    }
-    // --- End of Mock Data Block ---
 
     // If auth is resolved but user is not an admin (or not logged in), stop loading and return empty array.
     if (status !== 'resolved' || !userData || userData.role !== 'admin' || !db) {
