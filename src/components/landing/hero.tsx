@@ -67,9 +67,9 @@ const Hero = () => {
       
       {/* Background Image Container */}
       <m.div
-        className="absolute inset-0 top-1/4 -z-0"
+        className="absolute inset-0 top-0 -z-0"
         initial={{ opacity: 0, scale: 1.2 }}
-        animate={{ opacity: 0.15, scale: 1 }}
+        animate={{ opacity: 0.3, scale: 1 }}
         transition={{ duration: 1.5, ease: "easeOut", delay: 0.4 }}
       >
         {dashboardImage && (
