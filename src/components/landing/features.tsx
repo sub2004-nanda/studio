@@ -63,8 +63,8 @@ const Features = () => {
     <section id="features" className="py-20 md:py-32">
       <div className="container">
         <div className="text-center max-w-3xl mx-auto">
-          <h2 className="text-4xl md:text-5xl font-bold font-headline mb-4 bg-clip-text text-transparent bg-gradient-to-b from-white to-gray-400">Unlock Peak Performance</h2>
-          <p className="text-gray-300/80 md:text-lg mb-16">
+          <h2 className="text-4xl md:text-5xl font-bold font-headline mb-4 bg-clip-text text-transparent bg-gradient-to-b from-gray-900 to-gray-600">Unlock Peak Performance</h2>
+          <p className="text-gray-600 md:text-lg mb-16">
             ProductivityPulse offers a suite of powerful features designed to streamline workflows, enhance collaboration, and drive results.
           </p>
         </div>
@@ -77,12 +77,12 @@ const Features = () => {
         >
           {features.map((feature, index) => (
             <m.div key={index} variants={itemVariants}>
-              <div className="glass-card h-full p-8 transition-all duration-300 ease-in-out hover:border-blue-400/50 hover:-translate-y-2 hover:shadow-[0_0_30px_rgba(74,144,226,0.3)]">
+              <div className="bg-white/40 backdrop-blur-md border border-gray-200/60 h-full p-8 rounded-2xl transition-all duration-300 ease-in-out hover:border-blue-400/50 hover:-translate-y-2 hover:shadow-2xl hover:shadow-blue-500/10">
                 <div className="mb-4 p-3 bg-gradient-to-br from-blue-500/20 to-purple-600/20 rounded-lg w-fit shadow-lg border border-white/10">
-                  <feature.icon className="h-7 w-7 text-cyan-300" />
+                  <feature.icon className="h-7 w-7 text-blue-600" />
                 </div>
-                <h3 className="font-headline text-2xl font-semibold mb-2 text-white">{feature.title}</h3>
-                <p className="text-gray-300/70">{feature.description}</p>
+                <h3 className="font-headline text-2xl font-semibold mb-2 text-gray-900">{feature.title}</h3>
+                <p className="text-gray-600/90">{feature.description}</p>
               </div>
             </m.div>
           ))}

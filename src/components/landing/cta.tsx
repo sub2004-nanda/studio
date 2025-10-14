@@ -8,9 +8,9 @@ const Cta = () => {
   return (
     <section className="py-20 md:py-32">
       <div className="container">
-        <div className="relative rounded-3xl p-10 md:p-16 text-center overflow-hidden glass-card shadow-2xl shadow-blue-900/20">
-           <div className="absolute top-0 left-0 -translate-x-1/2 -translate-y-1/2 w-64 h-64 rounded-full bg-purple-600/30 filter blur-3xl opacity-50"></div>
-           <div className="absolute bottom-0 right-0 translate-x-1/2 translate-y-1/2 w-80 h-80 rounded-full bg-cyan-600/30 filter blur-3xl opacity-50"></div>
+        <div className="relative rounded-3xl p-10 md:p-16 text-center overflow-hidden bg-white/30 backdrop-blur-lg border border-gray-200/50 shadow-2xl shadow-blue-500/10">
+           <div className="absolute top-0 left-0 -translate-x-1/2 -translate-y-1/2 w-64 h-64 rounded-full bg-purple-600/20 filter blur-3xl opacity-50"></div>
+           <div className="absolute bottom-0 right-0 translate-x-1/2 translate-y-1/2 w-80 h-80 rounded-full bg-cyan-600/20 filter blur-3xl opacity-50"></div>
           <m.div 
             className="relative z-10"
             initial={{ opacity: 0, y: 20 }}
@@ -18,10 +18,10 @@ const Cta = () => {
             viewport={{ once: true, amount: 0.5 }}
             transition={{ duration: 0.6 }}
           >
-            <h2 className="text-4xl md:text-5xl font-bold font-headline mb-4 text-white">
+            <h2 className="text-4xl md:text-5xl font-bold font-headline mb-4 text-gray-900">
               Ready to Transform Your Team?
             </h2>
-            <p className="text-gray-300/80 text-lg mb-8 max-w-2xl mx-auto">
+            <p className="text-gray-600 text-lg mb-8 max-w-2xl mx-auto">
               Sign up today and start leveraging powerful tools to monitor, evaluate, and enhance performance across your organization.
             </p>
             <div className="flex justify-center gap-4">

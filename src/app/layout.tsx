@@ -32,7 +32,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`!scroll-smooth ${inter.variable} ${poppins.variable} dark`}>
+    <html lang="en" className={`!scroll-smooth ${inter.variable} ${poppins.variable}`}>
       <body className="font-body antialiased">
         <MotionProvider>
           <FirebaseProvider>
