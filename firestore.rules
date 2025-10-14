@@ -1,45 +1,27 @@
-rules_version = '2';
 
+rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
 
-    // Helper functions
-    function isOwner(userId) {
-      return request.auth.uid == userId;
+    // Helper function to check the role of the currently authenticated user.
+    // It reads the 'role' field from the user's own document in the 'users' collection.
+    function isRole(role) {
+      return get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == role;
     }
 
-    function isSignedIn() {
-      return request.auth != null;
-    }
-
-    function getUserData() {
-      return get(/databases/$(database)/documents/users/$(request.auth.uid)).data;
-    }
-
-    // Rules for 'users' collection
+    // Rules for the 'users' collection
     match /users/{userId} {
-      // Allow users to read their own data
-      allow read: if isSignedIn() && isOwner(userId);
-
-      // Allow users to create their own user document upon signup
-      allow create: if isSignedIn() && isOwner(userId);
+      // Admins can perform any action on any user document.
+      allow read, write, list: if isRole('admin');
       
-      // Allow admins to update user roles or statuses
-      allow update: if isSignedIn() && getUserData().role == 'admin';
-    }
-    
-    // Admins can read the entire 'users' collection
-    match /users {
-      allow list: if isSignedIn() && getUserData().role == 'admin';
+      // A non-admin user can only read or update their own user document.
+      allow read, update: if request.auth.uid == userId;
     }
 
-    // Rules for 'departments' collection
+    // Rules for the 'departments' collection
     match /departments/{departmentId} {
-      // Allow admins to create new departments
-      allow create: if isSignedIn() && getUserData().role == 'admin';
-      
-      // Allow any signed-in user to read department lists
-      allow list, read: if isSignedIn();
+      // Only admins can create new departments.
+      allow create: if isRole('admin');
     }
   }
 }
