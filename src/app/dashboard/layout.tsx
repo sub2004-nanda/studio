@@ -26,7 +26,7 @@ export default function DashboardLayout({
   // This prevents a flicker/redirect during hot reloads.
   if (status === 'loading' || !user) {
     return (
-      <div className="flex min-h-screen items-center justify-center">
+      <div className="flex min-h-screen items-center justify-center bg-background">
         <Loader2 className="h-12 w-12 animate-spin text-primary" />
       </div>
     );
@@ -34,9 +34,9 @@ export default function DashboardLayout({
   
   // Render the dashboard only once the user is confirmed to be authenticated.
   return (
-      <div className="flex min-h-screen w-full flex-col">
+      <div className="flex min-h-screen w-full flex-col bg-background">
         <DashboardHeader />
-        <main className="flex flex-1 flex-col gap-4 p-4 lg:gap-6 lg:p-6 bg-muted/40">
+        <main className="flex flex-1 flex-col gap-4 p-4 lg:gap-6 lg:p-6">
             {children}
         </main>
       </div>

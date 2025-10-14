@@ -5,6 +5,8 @@ import { Toaster } from "@/components/ui/toaster";
 import { Inter, Poppins } from 'next/font/google';
 import { FirebaseProvider } from '@/firebase/provider';
 import FirebaseErrorListener from '@/components/FirebaseErrorListener';
+import { MotionProvider } from '@/components/layout/motion-provider';
+
 
 const inter = Inter({
   subsets: ['latin'],
@@ -14,7 +16,7 @@ const inter = Inter({
 
 const poppins = Poppins({
   subsets: ['latin'],
-  weight: ['600', '700'],
+  weight: ['600', '700', '800'],
   variable: '--font-poppins',
   display: 'swap',
 });
@@ -30,13 +32,15 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`!scroll-smooth ${inter.variable} ${poppins.variable}`}>
+    <html lang="en" className={`!scroll-smooth ${inter.variable} ${poppins.variable} dark`}>
       <body className="font-body antialiased">
-        <FirebaseProvider>
-          {children}
-          <Toaster />
-          <FirebaseErrorListener />
-        </FirebaseProvider>
+        <MotionProvider>
+          <FirebaseProvider>
+            {children}
+            <Toaster />
+            <FirebaseErrorListener />
+          </FirebaseProvider>
+        </MotionProvider>
       </body>
     </html>
   );
