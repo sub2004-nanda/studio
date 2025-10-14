@@ -26,9 +26,9 @@ const NavLink = ({ href, icon: Icon, label, pathname, isMobile, onClick }: { hre
     <Link
         href={href}
         className={cn(
-            "flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary",
+            "flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary hover:bg-primary/10",
             pathname === href && "bg-muted text-primary",
-            "text-sm font-medium" // For horizontal nav
+            "text-sm font-medium"
         )}
         onClick={onClick}
     >
@@ -125,12 +125,12 @@ export default function DashboardHeader() {
             </Link>
 
             <div className="flex-1 items-center justify-end space-x-2 md:flex md:justify-center">
-              <nav className="hidden flex-col gap-6 text-lg font-medium md:flex md:flex-row md:items-center md:gap-5 md:text-sm lg:gap-6">
+              <nav className="hidden flex-col gap-6 text-lg font-medium md:flex md:flex-row md:items-center md:gap-1 md:text-sm lg:gap-2">
                   {currentNavItems.map(item => (
                       <Link
                           key={item.href}
                           href={item.href}
-                          className={cn("transition-colors hover:text-foreground", pathname === item.href ? "text-foreground font-semibold" : "text-muted-foreground")}
+                          className={cn("px-3 py-2 rounded-md transition-colors hover:bg-primary/10", pathname === item.href ? "text-primary font-semibold" : "text-muted-foreground hover:text-primary")}
                       >
                           {item.label}
                       </Link>

@@ -22,6 +22,7 @@ const Header = () => {
   }, []);
 
   const navLinks = [
+    { name: 'Home', href: '#' },
     { name: 'Features', href: '#features' },
     { name: 'Roles', href: '#roles' },
     { name: 'Pricing', href: '/pricing' },
@@ -40,12 +41,12 @@ const Header = () => {
             </span>
         </Link>
         <div className="hidden md:flex flex-1 items-center justify-center">
-          <nav className="flex items-center space-x-8 text-sm font-medium">
+          <nav className="flex items-center space-x-2 text-sm font-medium">
             {navLinks.map((link) => (
               <Link
                 key={link.name}
                 href={link.href}
-                className="transition-colors text-muted-foreground hover:text-foreground"
+                className="px-3 py-2 rounded-md transition-all text-foreground hover:text-primary hover:bg-primary/10 hover:scale-105"
               >
                 {link.name}
               </Link>
@@ -55,22 +56,16 @@ const Header = () => {
         
         <div className="flex flex-1 items-center justify-end space-x-2 md:flex-none">
           <nav className="flex items-center gap-2">
-            <Button variant="ghost" className="relative text-muted-foreground hover:bg-gray-100 hover:text-foreground rounded-full p-2 h-10 w-10">
-                <Bell className="h-5 w-5" />
-                <span className="absolute top-2 right-2 block h-2 w-2 rounded-full bg-cyan-400 ring-2 ring-background"></span>
+            <Button variant="ghost" asChild className="text-foreground hover:bg-primary/10">
+                <Link href="/login">Login</Link>
             </Button>
-            <div className="hidden sm:flex">
-                 <Button variant="ghost" asChild className="text-muted-foreground hover:text-foreground">
-                    <Link href="/login">Login</Link>
-                </Button>
-                <Button className="bg-white text-foreground font-semibold transition-all hover:bg-gray-100 border border-gray-300" asChild>
-                    <Link href="/signup">Sign Up</Link>
-                </Button>
-            </div>
+            <Button className="bg-primary text-primary-foreground font-semibold transition-all hover:bg-primary/90 hover:scale-105" asChild>
+                <Link href="/signup">Sign Up</Link>
+            </Button>
             <Button
                 onClick={() => setIsOpen(!isOpen)}
                 variant="ghost"
-                className="md:hidden rounded-md p-2 text-muted-foreground hover:text-foreground"
+                className="md:hidden rounded-md p-2 text-foreground hover:bg-primary/10"
             >
                 {isOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
             </Button>
@@ -92,14 +87,14 @@ const Header = () => {
                 key={link.name}
                 href={link.href}
                 onClick={() => setIsOpen(false)}
-                className="px-3 py-2 rounded-md text-muted-foreground hover:bg-gray-100 hover:text-foreground"
+                className="px-3 py-2 rounded-md text-foreground hover:bg-primary/10"
               >
                 {link.name}
               </Link>
             ))}
              <div className="border-t border-gray-200 pt-4 mt-2 flex flex-col space-y-2">
-                 <Link href="/login" onClick={() => setIsOpen(false)} className="px-3 py-2 rounded-md text-muted-foreground hover:bg-gray-100 hover:text-foreground">Login</Link>
-                 <Link href="/signup" onClick={() => setIsOpen(false)} className="px-3 py-2 rounded-md bg-gray-100 text-foreground text-center">Sign Up</Link>
+                 <Link href="/login" onClick={() => setIsOpen(false)} className="px-3 py-2 rounded-md text-foreground hover:bg-primary/10">Login</Link>
+                 <Link href="/signup" onClick={() => setIsOpen(false)} className="px-3 py-2 rounded-md bg-primary/10 text-primary text-center">Sign Up</Link>
              </div>
           </div>
         </m.div>
