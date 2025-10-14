@@ -7,7 +7,6 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { useUsers } from "@/hooks/use-users";
 import { useState } from "react";
 import { useAuth } from "@/hooks/use-auth";
 import { useToast } from "@/hooks/use-toast";
@@ -26,6 +25,16 @@ const initialRecognitions: Recognition[] = [
     { id: 3, from: 'Bob', to: 'David', message: 'Great job on the project proposal. Your hard work really paid off.', timestamp: '3 days ago' },
 ];
 
+// As per your request, using a predefined list of colleagues
+const colleagues = [
+    { uid: 'user-ankit', name: 'Ankit' },
+    { uid: 'user-subrat', name: 'Subrat' },
+    { uid: 'user-anjan', name: 'Anjan' },
+    { uid: 'user-omnshu', name: 'Omnshu' },
+    { uid: 'user-deepika', name: 'Deepika' },
+];
+
+
 function getInitials(name: string) {
     if (!name) return 'U';
     return name.split(' ').map(n => n[0]).join('').toUpperCase();
@@ -33,8 +42,7 @@ function getInitials(name: string) {
 
 
 export default function RecognitionPage() {
-    const { user, userData } = useAuth();
-    const { users } = useUsers(); 
+    const { userData } = useAuth();
     const { toast } = useToast();
     const [recognitions, setRecognitions] = useState<Recognition[]>(initialRecognitions);
     const [selectedUser, setSelectedUser] = useState<string | null>(null);
@@ -53,7 +61,7 @@ export default function RecognitionPage() {
 
         setIsLoading(true);
 
-        const toUser = users.find(u => u.uid === selectedUser);
+        const toUser = colleagues.find(u => u.uid === selectedUser);
 
         const newRecognition: Recognition = {
             id: recognitions.length + 1,
@@ -76,9 +84,6 @@ export default function RecognitionPage() {
             setIsLoading(false);
         }, 500);
     };
-
-    // Filter out the current user from the list of colleagues
-    const colleagues = users.filter(u => u.uid !== user?.uid);
 
     return (
         <>
@@ -107,7 +112,6 @@ export default function RecognitionPage() {
                                             {user.name}
                                         </SelectItem>
                                     ))}
-                                    {colleagues.length === 0 && <SelectItem value="loading" disabled>Loading colleagues...</SelectItem>}
                                 </SelectContent>
                             </Select>
                             <Textarea 
