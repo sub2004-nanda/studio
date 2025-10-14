@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button';
 import Logo from '@/components/icons/logo';
 import { Menu, X, Bell } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { motion, AnimatePresence } from 'framer-motion';
+import { m, AnimatePresence } from 'framer-motion';
 
 const Header = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -80,7 +80,7 @@ const Header = () => {
       
       <AnimatePresence>
       {isOpen && (
-        <motion.div
+        <m.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -20 }}
@@ -102,7 +102,7 @@ const Header = () => {
                  <Link href="/signup" onClick={() => setIsOpen(false)} className="px-3 py-2 rounded-md bg-white/10 text-white text-center">Sign Up</Link>
              </div>
           </div>
-        </motion.div>
+        </m.div>
       )}
       </AnimatePresence>
     </header>

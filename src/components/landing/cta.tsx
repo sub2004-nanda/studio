@@ -2,7 +2,7 @@
 "use client";
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
-import { motion } from "framer-motion";
+import { m } from "framer-motion";
 
 const Cta = () => {
   return (
@@ -11,7 +11,7 @@ const Cta = () => {
         <div className="relative rounded-3xl p-10 md:p-16 text-center overflow-hidden glass-card shadow-2xl shadow-blue-900/20">
            <div className="absolute top-0 left-0 -translate-x-1/2 -translate-y-1/2 w-64 h-64 rounded-full bg-purple-600/30 filter blur-3xl opacity-50"></div>
            <div className="absolute bottom-0 right-0 translate-x-1/2 translate-y-1/2 w-80 h-80 rounded-full bg-cyan-600/30 filter blur-3xl opacity-50"></div>
-          <motion.div 
+          <m.div 
             className="relative z-10"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -29,7 +29,7 @@ const Cta = () => {
                 <Link href="/signup">Get Started for Free</Link>
               </Button>
             </div>
-          </motion.div>
+          </m.div>
         </div>
       </div>
     </section>

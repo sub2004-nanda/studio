@@ -1,7 +1,7 @@
 
 "use client";
 
-import { motion } from "framer-motion";
+import { m } from "framer-motion";
 import { Users, Target, BarChart3, FileText, Bell, Lock } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
 
@@ -68,7 +68,7 @@ const Features = () => {
             ProductivityPulse offers a suite of powerful features designed to streamline workflows, enhance collaboration, and drive results.
           </p>
         </div>
-        <motion.div 
+        <m.div 
           className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
           variants={containerVariants}
           initial="hidden"
@@ -76,7 +76,7 @@ const Features = () => {
           viewport={{ once: true, amount: 0.2 }}
         >
           {features.map((feature, index) => (
-            <motion.div key={index} variants={itemVariants}>
+            <m.div key={index} variants={itemVariants}>
               <div className="glass-card h-full p-8 transition-all duration-300 ease-in-out hover:border-blue-400/50 hover:-translate-y-2 hover:shadow-[0_0_30px_rgba(74,144,226,0.3)]">
                 <div className="mb-4 p-3 bg-gradient-to-br from-blue-500/20 to-purple-600/20 rounded-lg w-fit shadow-lg border border-white/10">
                   <feature.icon className="h-7 w-7 text-cyan-300" />
@@ -84,9 +84,9 @@ const Features = () => {
                 <h3 className="font-headline text-2xl font-semibold mb-2 text-white">{feature.title}</h3>
                 <p className="text-gray-300/70">{feature.description}</p>
               </div>
-            </motion.div>
+            </m.div>
           ))}
-        </motion.div>
+        </m.div>
       </div>
     </section>
   );

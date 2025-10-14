@@ -1,7 +1,7 @@
 
 "use client";
 
-import { motion } from "framer-motion";
+import { m } from "framer-motion";
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { PlayCircle } from "lucide-react";
@@ -40,25 +40,25 @@ const Hero = () => {
       <div className="absolute bottom-1/4 left-1/3 w-96 h-96 bg-cyan-600/20 rounded-full filter blur-3xl opacity-50 animate-blob animation-delay-4000"></div>
 
       <div className="container relative">
-        <motion.div
+        <m.div
           className="text-center"
           variants={containerVariants}
           initial="hidden"
           animate="visible"
         >
-          <motion.h1
+          <m.h1
             className="text-5xl md:text-7xl lg:text-8xl font-extrabold font-headline tracking-tight mb-6 bg-clip-text text-transparent bg-gradient-to-b from-white to-gray-300"
             variants={itemVariants}
           >
             Empower Your Organization with Smart Productivity Tracking
-          </motion.h1>
-          <motion.p
+          </m.h1>
+          <m.p
             className="text-lg md:text-xl text-gray-300/80 mb-10 max-w-3xl mx-auto"
             variants={itemVariants}
           >
             Transform daily work into measurable progress with data-driven insights and seamless productivity management.
-          </motion.p>
-          <motion.div
+          </m.p>
+          <m.div
             className="flex flex-col sm:flex-row justify-center items-center gap-4"
             variants={itemVariants}
           >
@@ -69,8 +69,8 @@ const Hero = () => {
                 <PlayCircle className="mr-2 h-5 w-5" />
                 Watch Demo
             </Button>
-          </motion.div>
-        </motion.div>
+          </m.div>
+        </m.div>
       </div>
     </section>
   );
