@@ -5,6 +5,8 @@ import { UserData } from "@/hooks/use-auth";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { CheckCircle, ListTodo, Trophy, TrendingUp, BookOpen, Bot, Award, BarChart, Users } from "lucide-react";
 import { FeatureCard } from "./FeatureCard";
+import { useState } from "react";
+import { cn } from "@/lib/utils";
 
 const StatCard = ({ title, value, icon: Icon, change }: { title: string, value: string | number, icon: React.ElementType, change?: string }) => {
     return (
@@ -22,6 +24,13 @@ const StatCard = ({ title, value, icon: Icon, change }: { title: string, value: 
 };
 
 export default function EmployeeDashboard({ user, userData }: { user: any; userData: UserData | null }) {
+    const [pulse, setPulse] = useState<string | null>(null);
+
+    const handlePulse = (mood: string) => {
+        if (!pulse) {
+            setPulse(mood);
+        }
+    }
     
     return (
         <>
@@ -82,13 +91,22 @@ export default function EmployeeDashboard({ user, userData }: { user: any; userD
                         <CardTitle>Team Pulse</CardTitle>
                     </CardHeader>
                     <CardContent>
-                        <p className="text-sm text-muted-foreground mb-4">How are you feeling about your work this week?</p>
-                        <div className="flex justify-around">
-                            <button className="text-3xl hover:scale-125 transition-transform">😞</button>
-                            <button className="text-3xl hover:scale-125 transition-transform">😐</button>
-                            <button className="text-3xl hover:scale-125 transition-transform">🙂</button>
-                            <button className="text-3xl hover:scale-125 transition-transform">😁</button>
-                        </div>
+                        {pulse ? (
+                            <div className="text-center">
+                                <p className="text-sm text-muted-foreground mb-4">Thank you for your feedback!</p>
+                                <p className="text-4xl">{pulse}</p>
+                            </div>
+                        ) : (
+                            <>
+                                <p className="text-sm text-muted-foreground mb-4">How are you feeling about your work this week?</p>
+                                <div className="flex justify-around">
+                                    <button onClick={() => handlePulse('😞')} className={cn("text-3xl transition-transform", pulse ? "cursor-not-allowed" : "hover:scale-125", pulse === '😞' && "scale-125")}>😞</button>
+                                    <button onClick={() => handlePulse('😐')} className={cn("text-3xl transition-transform", pulse ? "cursor-not-allowed" : "hover:scale-125", pulse === '😐' && "scale-125")}>😐</button>
+                                    <button onClick={() => handlePulse('🙂')} className={cn("text-3xl transition-transform", pulse ? "cursor-not-allowed" : "hover:scale-125", pulse === '🙂' && "scale-125")}>🙂</button>
+                                    <button onClick={() => handlePulse('😁')} className={cn("text-3xl transition-transform", pulse ? "cursor-not-allowed" : "hover:scale-125", pulse === '😁' && "scale-125")}>😁</button>
+                                </div>
+                            </>
+                        )}
                     </CardContent>
                 </Card>
                  <Card className="lg:col-span-2">
