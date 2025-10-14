@@ -2,9 +2,9 @@
   "placeholderImages": [
     {
       "id": "hero-dashboard",
-      "description": "A modern, clean dashboard UI for a productivity application.",
-      "imageUrl": "https://picsum.photos/seed/dashboard-ui/1200/800",
-      "imageHint": "dashboard ui"
+      "description": "An abstract, futuristic background with blue and purple gradients and network lines.",
+      "imageUrl": "https://picsum.photos/seed/tech-abstract/1200/800",
+      "imageHint": "abstract tech"
     }
   ]
 }

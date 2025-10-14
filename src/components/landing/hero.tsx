@@ -41,6 +41,25 @@ const Hero = () => {
           initial="hidden"
           animate="visible"
         >
+          {dashboardImage && (
+             <m.div 
+                className="absolute inset-0 -z-10 opacity-20"
+                initial={{ opacity: 0, scale: 1.1 }}
+                animate={{ opacity: 0.1, scale: 1 }}
+                transition={{ duration: 1.5, ease: "easeOut" }}
+             >
+                <Image 
+                    src={dashboardImage.imageUrl}
+                    alt={dashboardImage.description}
+                    fill
+                    priority
+                    className="object-cover"
+                    data-ai-hint={dashboardImage.imageHint}
+                />
+                 <div className="absolute inset-0 bg-gradient-to-t from-background via-background/80 to-transparent"></div>
+            </m.div>
+           )}
+
           <m.h1
             className="text-5xl md:text-7xl lg:text-8xl font-extrabold font-headline tracking-tight mb-6 bg-clip-text text-transparent bg-gradient-to-b from-gray-900 to-gray-700"
             variants={itemVariants}
@@ -61,27 +80,6 @@ const Hero = () => {
               <Link href="/signup">Get Started for Free</Link>
             </Button>
           </m.div>
-
-           {dashboardImage && (
-             <m.div 
-                className="mt-16 lg:mt-20"
-                variants={itemVariants}
-             >
-                <div className="relative shadow-2xl shadow-blue-500/20 rounded-2xl">
-                   <div className="absolute inset-0 border-2 border-transparent group-hover:border-blue-400 rounded-2xl transition-all duration-300" />
-                    <Image 
-                        src={dashboardImage.imageUrl}
-                        alt={dashboardImage.description}
-                        width={1200}
-                        height={800}
-                        priority
-                        className="rounded-xl border-4 border-white/50"
-                        data-ai-hint={dashboardImage.imageHint}
-                    />
-                </div>
-            </m.div>
-           )}
-
         </m.div>
       </div>
     </section>
