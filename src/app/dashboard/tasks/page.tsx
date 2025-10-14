@@ -206,11 +206,13 @@ function ManagerTaskReviewPage() {
     const { tasks: allTeamTasks, loading: tasksLoading } = useTeamTasks(teamMembers);
     const [tasks, setTasks] = useState(allTeamTasks);
 
+    // This effect synchronizes the local tasks state with the data from the hook.
     useEffect(() => {
         setTasks(allTeamTasks);
     }, [allTeamTasks]);
 
     const submittedTasks = useMemo(() => {
+        // Now filtering the synchronized 'tasks' state
         return tasks.filter(task => task.status === 'Submitted');
     }, [tasks]);
 
@@ -286,7 +288,7 @@ function ManagerTaskReviewPage() {
                                     </TableRow>
                                 )
                             })}
-                             {submittedTasks.length === 0 && (
+                             {submittedTasks.length === 0 && !loading && (
                                 <TableRow>
                                     <TableCell colSpan={5} className="h-24 text-center">
                                         No tasks are currently pending review. Great job, team!
@@ -321,7 +323,5 @@ export default function TasksPage() {
     // Employees see their own tasks
     return <EmployeeTasksPage />;
 }
-
-    
 
     
