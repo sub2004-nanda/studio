@@ -2,21 +2,8 @@
 "use client";
 
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
-
-const productivityData = [
-  { name: 'Alice', score: 95, status: 'On Task' },
-  { name: 'Bob', score: 82, status: 'On Task' },
-  { name: 'Charlie', score: 65, status: 'Needs Support' },
-  { name: 'David', score: 98, status: 'Excelling' },
-  { name: 'Eve', score: 75, status: 'On Task' },
-  { name: 'Frank', score: 45, status: 'Idle' },
-  { name: 'Grace', score: 88, status: 'On Task' },
-  { name: 'Heidi', score: 91, status: 'On Task' },
-  { name: 'Ivan', score: 78, status: 'On Task' },
-  { name: 'Judy', score: 55, status: 'Needs Support' },
-  { name: 'Mallory', score: 100, status: 'Excelling' },
-  { name: 'Niaj', score: 20, status: 'Idle' },
-];
+import { UserData } from "@/hooks/use-auth";
+import { useMemo } from "react";
 
 const getProductivityColor = (score: number) => {
   if (score >= 95) return 'bg-emerald-500'; // Excelling
@@ -26,7 +13,43 @@ const getProductivityColor = (score: number) => {
   return 'bg-red-500'; // Idle / At Risk
 };
 
-export default function ProductivityHeatmap() {
+type Task = {
+    id: number;
+    title: string;
+    project: string;
+    priority: "High" | "Medium" | "Low";
+    due: string;
+    status: "Pending" | "In Progress" | "Submitted" | "Completed" | "Overdue";
+    assignee?: string;
+}
+
+interface ProductivityHeatmapProps {
+    teamMembers: UserData[];
+    tasks: Task[];
+}
+
+
+export default function ProductivityHeatmap({ teamMembers, tasks }: ProductivityHeatmapProps) {
+
+    const productivityData = useMemo(() => {
+        return teamMembers.map(member => {
+            const memberTasks = tasks.filter(t => t.assignee === member.name);
+            const completedTasks = memberTasks.filter(t => t.status === 'Completed').length;
+            const score = memberTasks.length > 0 ? Math.round((completedTasks / memberTasks.length) * 100) : 75; // Default score if no tasks
+            
+            let status = 'On Task';
+            if (score >= 95) status = 'Excelling';
+            else if (score < 70 && score >= 50) status = 'Needs Support';
+            else if (score < 50) status = 'Idle';
+
+            return {
+                name: member.name,
+                score,
+                status
+            }
+        });
+    }, [teamMembers, tasks]);
+
   return (
     <div>
         <TooltipProvider>
