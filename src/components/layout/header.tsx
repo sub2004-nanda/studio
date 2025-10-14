@@ -1,91 +1,46 @@
+
 "use client";
 
-import { useState } from 'react';
 import Link from 'next/link';
-import { Menu, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import Logo from '@/components/icons/logo';
+import { Bell, Briefcase } from 'lucide-react';
 
 const Header = () => {
-  const [isOpen, setIsOpen] = useState(false);
-
   const navLinks = [
     { name: 'Home', href: '#' },
-    { name: 'Features', href: '#features' },
-    { name: 'Roles', href: '#roles' },
-    { name: 'Contact', href: '#contact' },
+    { name: 'Services', href: '#' },
+    { name: 'About', href: '#' },
   ];
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 shadow-md">
-      <div className="container flex h-16 items-center">
-        <div className="mr-4 flex items-center">
+    <header className="fixed top-8 left-1/2 -translate-x-1/2 z-50 w-full max-w-4xl px-4">
+      <div className="container flex h-16 items-center justify-between rounded-full bg-white/30 backdrop-blur-md border border-white/50 shadow-lg px-6">
+        <div className="flex items-center">
           <Link href="/" className="flex items-center space-x-2">
-            <div className="relative">
-                <Logo className="h-8 w-8 text-primary" />
-                <div className="absolute -inset-1 bg-primary/20 blur-lg -z-10 animate-blob"></div>
-            </div>
-            <span className="hidden font-bold sm:inline-block font-headline text-lg">ProductivityPulse</span>
+            <Logo className="h-8 w-8 text-primary" />
+            <span className="font-bold text-lg text-gray-800">ProducPlus</span>
           </Link>
         </div>
-        <div className="flex flex-1 items-center justify-end space-x-2 md:justify-center">
-          <nav className="hidden md:flex md:items-center md:space-x-2 text-sm font-medium">
-            {navLinks.map((link) => (
-              <Link
-                key={link.name}
-                href={link.href}
-                className="px-3 py-2 rounded-md transition-all hover:bg-primary hover:text-primary-foreground active:scale-95"
-              >
-                {link.name}
-              </Link>
-            ))}
-          </nav>
-        </div>
-        <div className="hidden md:flex items-center justify-end space-x-2">
-          <Button variant="ghost" asChild className="hover:bg-primary/90 hover:text-primary-foreground">
-            <Link href="/login">Login</Link>
+        <nav className="hidden md:flex items-center space-x-6 text-sm font-medium">
+          {navLinks.map((link) => (
+            <Link
+              key={link.name}
+              href={link.href}
+              className="text-gray-600 transition-colors hover:text-primary"
+            >
+              {link.name}
+            </Link>
+          ))}
+        </nav>
+        <div className="flex items-center justify-end space-x-4">
+          <Briefcase className="h-5 w-5 text-gray-600 hover:text-primary cursor-pointer" />
+          <Button asChild className="rounded-full shadow-md transition-all hover:scale-105">
+            <Link href="/contact">Contact</Link>
           </Button>
-          <Button asChild className="shadow-lg shadow-primary/40 transition-all hover:scale-105">
-            <Link href="/signup">Sign Up</Link>
-          </Button>
-        </div>
-        <div className="md:hidden">
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={() => setIsOpen(!isOpen)}
-            aria-label="Toggle menu"
-          >
-            {isOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
-          </Button>
+          <Bell className="h-5 w-5 text-gray-600 hover:text-primary cursor-pointer" />
         </div>
       </div>
-      {isOpen && (
-        <div className="md:hidden">
-          <div className="container pb-4 flex flex-col space-y-4">
-            <nav className="flex flex-col space-y-2">
-              {navLinks.map((link) => (
-                <Link
-                  key={link.name}
-                  href={link.href}
-                  className="py-2 text-center transition-colors hover:text-primary"
-                  onClick={() => setIsOpen(false)}
-                >
-                  {link.name}
-                </Link>
-              ))}
-            </nav>
-            <div className="flex flex-col space-y-2">
-              <Button variant="outline" asChild>
-                <Link href="/login">Login</Link>
-              </Button>
-              <Button asChild>
-                <Link href="/signup">Sign Up</Link>
-              </Button>
-            </div>
-          </div>
-        </div>
-      )}
     </header>
   );
 };
