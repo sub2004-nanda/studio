@@ -1,29 +1,42 @@
+
 rules_version = '2';
+
 service cloud.firestore {
   match /databases/{database}/documents {
-    match /users/{userId} {
-      // Any authenticated user can read their own user document.
-      // Any authenticated user can create their own user document on signup.
-      // Admins can update any user document (for role/status changes).
-      // Individual users can update their own document.
-      allow read, update: if request.auth != null && (request.auth.uid == userId || get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin');
-      allow create: if request.auth != null;
 
-      // Only admins can list the entire users collection.
-      allow list: if request.auth != null && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin';
-      
-      // Allow admins to delete users.
-      allow delete: if request.auth != null && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin';
+    // Helper function to check for admin role
+    function isAdmin() {
+      return get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin';
     }
 
+    // Rules for the 'users' collection
+    match /users/{userId} {
+      // Admins can perform any action on any user document
+      allow read, write: if isAdmin();
+      
+      // Any authenticated user can create their own user document (e.g., on signup)
+      // and can read their own document. They can only update their own document.
+      allow create, get: if request.auth != null;
+      allow update: if request.auth.uid == userId;
+
+      // Only admins can list all users
+      allow list: if isAdmin();
+    }
+
+    // Rules for the 'departments' collection
     match /departments/{departmentId} {
-      // Only admins can create, read, update, or delete departments.
-      allow read, write: if request.auth != null && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin';
+        // Only admins can create, read, and manage departments
+        allow read, write: if isAdmin();
     }
     
+    // Rules for the 'projects' collection
     match /projects/{projectId} {
-       // Only admins can create projects.
-       allow create: if request.auth != null && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin';
+        // Only admins can assign/create new projects
+        allow create: if isAdmin();
+        
+        // You might want to allow managers to read projects assigned to them.
+        // This is a placeholder for more granular rules.
+        allow read, update: if isAdmin() || get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'manager';
     }
   }
 }
