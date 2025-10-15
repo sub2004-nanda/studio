@@ -14,7 +14,7 @@ const Footer = () => {
           <div className="md:col-span-1">
              <Link href="/" className="flex items-center space-x-2 mb-4">
                 <Logo className="h-8 w-8 text-primary" />
-                <span className="font-bold font-headline text-lg text-foreground">ProductivityPulse</span>
+                <span className="font-bold font-headline text-lg text-foreground">Saksham</span>
             </Link>
             <p className="text-muted-foreground text-sm">
                 Empowering teams to reach their full potential with smart productivity tracking.
@@ -65,7 +65,7 @@ const Footer = () => {
         </div>
         
         <div className="border-t pt-8 mt-8 text-center text-sm text-muted-foreground">
-            <p>&copy; {new Date().getFullYear()} ProductivityPulse. All Rights Reserved.</p>
+            <p>&copy; {new Date().getFullYear()} Saksham. All Rights Reserved.</p>
         </div>
       </div>
     </footer>

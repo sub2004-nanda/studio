@@ -110,7 +110,7 @@ export default function DashboardHeader() {
                         onClick={() => setIsMobileMenuOpen(false)}
                     >
                         <Logo className="h-6 w-6 text-primary" />
-                        <span className="">ProductivityPulse</span>
+                        <span className="">Saksham</span>
                     </Link>
                     {currentNavItems.map(item => (
                         <NavLink key={item.href} {...item} pathname={pathname} isMobile onClick={() => setIsMobileMenuOpen(false)} />
@@ -121,7 +121,7 @@ export default function DashboardHeader() {
 
             <Link href="/dashboard" className="hidden md:flex items-center gap-2 font-semibold mr-6">
                 <Logo className="h-6 w-6 text-primary" />
-                <span className="">ProductivityPulse</span>
+                <span className="">Saksham</span>
             </Link>
 
             <div className="flex-1 items-center justify-end space-x-2 md:flex md:justify-center">

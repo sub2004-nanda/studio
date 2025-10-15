@@ -22,7 +22,7 @@ const poppins = Poppins({
 });
 
 export const metadata: Metadata = {
-  title: 'ProductivityPulse',
+  title: 'Saksham',
   description: 'Empower Your Organization with Smart Productivity Tracking',
 };
 

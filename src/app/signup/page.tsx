@@ -13,7 +13,7 @@ export default function SignupPage() {
                 <Logo className="h-10 w-10 text-primary" />
             </Link>
             <CardTitle className="font-headline text-2xl">Create an Account</CardTitle>
-            <CardDescription>Join ProductivityPulse and start boosting your team&apos;s performance.</CardDescription>
+            <CardDescription>Join Saksham and start boosting your team&apos;s performance.</CardDescription>
           </CardHeader>
           <CardContent>
             <SignupForm />

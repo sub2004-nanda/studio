@@ -37,7 +37,7 @@ const Header = () => {
         <Link href="/" className="mr-6 flex items-center space-x-2">
             <Logo className="h-7 w-7 text-primary" />
             <span className="font-bold text-xl text-foreground">
-              ProductivityPulse
+              Saksham
             </span>
         </Link>
         <div className="hidden md:flex flex-1 items-center justify-center">

@@ -38,7 +38,7 @@ const Roles = () => {
         <div className="text-center max-w-3xl mx-auto">
           <h2 className="text-3xl md:text-4xl font-bold font-headline mb-4">Built for Every Role in Your Team</h2>
           <p className="text-muted-foreground md:text-lg mb-12">
-            ProductivityPulse offers tailored experiences for every member of your organization, ensuring everyone has the right tools to succeed.
+            Saksham offers tailored experiences for every member of your organization, ensuring everyone has the right tools to succeed.
           </p>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
