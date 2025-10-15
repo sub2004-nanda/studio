@@ -1,5 +1,1 @@
-# Firebase Studio
-
-This is a NextJS starter in Firebase Studio.
-
-To get started, take a look at src/app/page.tsx.
+Government offices often suffer from low levels of productivity at the organizational, team and individual levels, but there are no online tools to set goals/ objectives, define and benchmark success parameters, track progress and calculate productivity levels at the aforesaid 3 levels. To address this management gap and improve productivity and employee engagement in government offices a suitable online tool/ module should be developed under the e-Office platform.# Saksham
